@@ -15,8 +15,11 @@ import com.widus.dto.board.BoardRole;
 public class BoardController {
 	
 	@GetMapping(value="/board_list.do")
-	public String openBoard_list(@RequestParam("division") BoardRole role, Model model)  {
+	public String openBoard_list(@LoginUser SessionUser user, @RequestParam("division") BoardRole role, Model model)  {
 		model.addAttribute("divisionList", BoardRole.values());
+		if(user != null) {
+			model.addAttribute("user", user);
+		}
 		model.addAttribute("division", role);
 		
 		return "board/board_list";
