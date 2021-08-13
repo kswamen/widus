@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body th:fragment="main-body">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/">
+			<h4>WIDUS</h4>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Spot 리뷰보기 <span
+							class="sr-only">(current)</span></a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="#">음식점</a>
+						<a class="dropdown-item" href="#">병원</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">여가 시설</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						게시판
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" th:each="division: ${divisionList}"
+							th:href="@{/board/board_list.do(division=${division.getKey()})}">[[${division.getValue()}]]</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Dropdown
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="#">Action</a>
+						<a class="dropdown-item" href="#">Another action</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#">Something else here</a>
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">Disabled</a>
+				</li>
+			</ul>
+			<form id="menuForm" class="form-inline my-2 my-lg-0">
+				<img class="user_profile_image" th:if="${user != null}" th:src="${user.getPicture()}" />
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				<div th:if="${user == null}" class="btn-group">
+					<button type="button" class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false">
+						Login
+					</button>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a href="/oauth2/authorization/google">
+							<button class="dropdown-item" type="button">Google</button>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a href="/oauth2/authorization/kakao">
+							<button class="dropdown-item" type="button">Kakao</button>
+						</a>
+						<div class="dropdown-divider"></div>
+						<a href="/oauth2/authorization/naver">
+							<button class="dropdown-item" type="button">Naver</button>
+						</a>
+					</div>
+				</div>
+				<div th:if="${user != null}">
+					<button id="logout_btn" onClick="logout_confirm()" type="button"
+						class="btn btn-outline-danger">Logout</button>
+				</div>
+			</form>
+
+		</div>
+	</nav>
+
+	<th:block layout:fragment="content"></th:block>
+
+	<footer class="footer mt-auto py-3 bg-dark">
+		<div class="container">
+			<span class="text-muted">copyrightⓒ 2021 All rights reserved by WorldLove.</span>
+		</div>
+	</footer>
+
+
+	<script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{/js/popper.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+
+		function logout_confirm() {
+			if (confirm("로그아웃하시겠습니까?") == true) {
+				location.href = "/logout";
+			}
+		}
+
+		/*[- end of function -]*/
+
+		/*]]>*/
+	</script>
+
+	<th:block layout:fragment="script"></th:block>
+
+	<th:block layout:fragment="css"></th:block>
+
+</body>
+
+</html>

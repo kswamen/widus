@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+@font-face {
+	font-family: 'NanumBarunGothic';
+	src: url('/fonts/NanumBarunGothic.eot');
+	src: url('/fonts/NanumBarunGothic.eot') format('embedded-opentype'),
+		url('/fonts/NanumBarunGothic.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'JalNan';
+	src: url('/fonts/JalnanOTF.otf') format('opentype');
+}
+
+body {
+	background-color: #F5F5DC;
+	font-family: 'NanumBarnGothic';
+}
+
+.navbar .navbar-brand h4 {
+	margin: 0;
+}
+
+nav.navbar {
+	font-family: 'JalNan';
+}
+
+/* 검색 버튼 및 로그인 버튼 */
+form#menuForm .btn {
+	margin-left: 5px;
+}
+.login-btn {
+	margin-left: 5px;
+}
+
+/* 점보트론 */
+div.p-5.mb-4 {
+	margin-top: 24px;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-radius: 15px;
+	border: 0.5rem solid #808080;
+}
+
+
+/* 유저 프로필 이미지 */
+form#menuForm img.user_profile_image {
+	border-radius: 50%;
+	margin-right: 10px;
+	width: 50px;
+	border: 3px solid grey;
+}

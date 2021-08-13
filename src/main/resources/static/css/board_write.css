@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+div.p-5.mb-4 {
+	padding: 0px !important;
+}
+
+
+
+div.board_write_submit_btn {
+	display: flex;
+	justify-content: flex-end;
+}
+
+form.board_write_form {
+	padding: 10px;
+	border-radius: 15px;
+	border: 3px dotted grey;
+}

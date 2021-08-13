@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+div.p-5.mb-4 {
+	padding: 0px !important;
+}
+
+ul.pagination {
+	justify-content: center;
+}
+
+div.edit-post {
+	display: flex;
+	margin-top: 30px;
+	justify-content: flex-end;
+}
+
+div.text-center {
+	margin-top: 20px;
+}
