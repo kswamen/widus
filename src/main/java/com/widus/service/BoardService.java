@@ -1,5 +1,6 @@
 package com.widus.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRepository;
+import com.widus.dto.board.BoardRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,5 +25,10 @@ public class BoardService {
 	@Transactional
 	public Board saveBoard(Board board) {
 		return boardRepository.save(board);
+	}
+	
+	@Transactional
+	public List<Board> getBoardByParams(BoardRole role) {
+		return boardRepository.findByParams(role);
 	}
 }

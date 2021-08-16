@@ -1,5 +1,7 @@
 package com.widus;
 
+import java.util.Collection;
+
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,16 @@ public class BoardTest {
 				.content("test content")
 				.role(BoardRole.FREE).build();
 		boardRepository.save(board);
+	}
+	
+	@Test
+	void getBoardList() {
+		Collection<Board> board = boardRepository.findByParams(BoardRole.FREE);
+		Board[] arr = board.toArray(new Board[board.size()]);
+		System.out.println(board.size());
+		for(int i = 0; i < board.size(); i++) {
+			System.out.println(arr[i].getTitle());
+		}
 	}
 	
 	@Test

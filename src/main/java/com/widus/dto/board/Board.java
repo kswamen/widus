@@ -28,8 +28,11 @@ public class Board extends BaseTimeEntity {
 	@Column(nullable=false)
 	private String title;
 
-	@Column(nullable=false)
+	@Column(nullable=false, columnDefinition = "LONGTEXT")
 	private String content;
+	
+	@Column(nullable=false)
+	private String writer;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -52,10 +55,11 @@ public class Board extends BaseTimeEntity {
 	private String thumbnail;
 
 	@Builder
-	public Board(String title, String content, String email, BoardRole role, String deleted, String thumbnail) {
+	public Board(String title, String content, String writer, String email, BoardRole role, String deleted, String thumbnail) {
 		this.title = title;
 		this.content = content;
 		this.email = email;
+		this.writer = writer;
 		this.role = role;
 		this.deleted = deleted;
 		this.thumbnail = thumbnail;

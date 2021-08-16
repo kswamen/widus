@@ -3,27 +3,35 @@
 	layout:decorator="common/layout/basic">
 
 <th:block layout:fragment="content">
-	<input type="text" th:value="${division.getKey()}"/>
-
+	<input type="text" th:value="${division.getKey()}" />
 	<div class="p-5 mb-4 bg-light rounded-3">
 		<div class="container-fluid py-5">
 			<div class="card">
 				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-hover">
+					<table class="table table-responsible table-bordered table-striped table-hover">
 						<thead class="thead-dark">
 							<tr>
-								<th scope="col">#</th>
-								<th scope="col">First</th>
-								<th scope="col">Last</th>
-								<th scope="col">Handle</th>
+								<th style="width: 5%" scope="col">No.</th>
+								<th style="width: 10%" scope="col">T</th>
+								<th style="width: 70%" scope="col">Ttile</th>
+								<th style="width: 10%" scope="col">Writer</th>
+								<th style="width: 5%" scope="col">R</th>
+
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th scope="row">1</th>
-								<td>Mark</td>
-								<td>Otto</td>
-								<td>@mdo</td>
+							<tr th:if="${not #lists.isEmpty( boardList )}" class="board_content_row" th:each="row : ${boardList}"
+								onclick="moveDetailPage(this);">
+								<td scope="row" id="boardId" th:text="${row.id}"></td>
+								<td scope="row"><img style="border-radius: 50%;"
+										src="https://placeimg.com/50/50/any/grayscale" /></td>
+								<td class="text-left" th:text="${row.title}"></td>
+								<td th:text="${row.writer}"></td>
+								<td th:text="${row.recommend}"></td>
+
+							</tr>
+							<tr th:unless="${not #lists.isEmpty( boardList )}">
+								<td colspan="5">조회된 결과가 없습니다.</td>
 							</tr>
 						</tbody>
 					</table>
@@ -32,10 +40,11 @@
 
 			<div class="edit-post">
 				<div class="btn-group" role="group" aria-label="Basic example">
-					<a href="/board/board_write.do"><button type="button" class="btn btn-secondary">Write Post</button></a>
+					<a href="/board/board_write.do"><button type="button" class="btn btn-secondary">Write
+							Post</button></a>
 				</div>
 			</div>
-			
+
 
 			<div class="text-center">
 				<ul class="pagination">
@@ -61,7 +70,10 @@
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-
+		function moveDetailPage(row) {
+			var id = $(row).find("td#boardId").text();
+			window.location = "/board/board_detail.do?id=" + id;
+		}
 
 		/*[- end of function -]*/
 

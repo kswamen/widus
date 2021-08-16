@@ -17,3 +17,16 @@ div.edit-post {
 div.text-center {
 	margin-top: 20px;
 }
+
+thead.thead-dark tr th {
+	text-align: center;
+}
+
+tbody tr td {
+	text-align: center;
+	vertical-align: middle !important;
+}
+
+tr.board_content_row:hover {
+	cursor: pointer;
+}

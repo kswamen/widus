@@ -13,12 +13,13 @@
 			[[${board.getEmail()}]]
 
 
-			<form th:action="@{/board/register.do}" th:object="${board}" method="POST" class="board_write_form">
-				<input type="hidden" th:field="*{email}">
-				<input type="hidden" th:field="*{thumbnail}">
+			<form th:action="@{/board/register.do}" method="POST" class="board_write_form">
+				<input type="hidden" name="email" th:value="${user.getEmail()}">
+				<input type="hidden" name="writer" th:value="${user.getName()}">
+				<input type="hidden" name="thumbnail">
 				<div class="form-group">
 					<label for="exampleFormControlInput1">Title</label>
-					<input type="text" th:field="*{title}" class="form-control" placeholder="Put title here...">
+					<input type="text" name="title" class="form-control" placeholder="Put title here...">
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlSelect1">Example select</label>
@@ -36,11 +37,11 @@
 							[[${division.getValue()}]]
 						</option>
 					</select>
-					<input type="hidden" th:field="*{role}" id="role_input">
+					<input type="hidden" id="role" name="role">
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlTextarea1">Content</label>
-					<textarea th:field="*{content}" name="content" class="form-control"></textarea>
+					<textarea id="content" name="content" class="form-control"></textarea>
 				</div>
 				<div class="board_write_submit_btn">
 					<button type="button" onclick="submit_btn_click();" class="btn btn-primary">Primary</button>
@@ -69,7 +70,7 @@
 		
 		function submit_btn_click() {
 			var form = $("form.board_write_form");
-			var role_input = $("input#role_input");
+			var role_input = $("input#role");
 			var option = $("#divisionSelect option:selected").attr("key");
 			
 			role_input.val(option);

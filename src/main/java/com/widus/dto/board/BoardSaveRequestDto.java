@@ -10,15 +10,17 @@ import lombok.NoArgsConstructor;
 public class BoardSaveRequestDto {
 	private String title;
 	private String content;
+	private String writer;
 	private BoardRole role;
 	private String thumbnail;
 	private String email;
 
 	@Builder
-	public BoardSaveRequestDto(String title, String content, BoardRole role, String thumbnail, String email) {
+	public BoardSaveRequestDto(String title, String content, String writer, BoardRole role, String thumbnail, String email) {
 		this.title = title;
 		this.content = content;
 		this.role = role;
+		this.writer = writer;
 		this.thumbnail = thumbnail;
 		this.email = email;
 	}
@@ -28,6 +30,7 @@ public class BoardSaveRequestDto {
 				.title(title)
 				.content(content)
 				.role(role)
+				.writer(writer)
 				.thumbnail(thumbnail)
 				.email(email)
 				.build();
