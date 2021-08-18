@@ -1,17 +1,55 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="common/layout/basic">
+	
+/* 좋아요 테이블을 만들 때 좋아요를 누른 인원에 대해 스트링 형태로 전달한 후 나중에 리스트로 파싱 */
 
 <th:block layout:fragment="content">
-	[[${board.getTitle()}]]
-	
+	<div class="container-div">
+		<div class="card main-div title-div">
+			<div class="card-body">
+				[[${board.getTitle()}]]
+			</div>
+		</div>
+		<div>
+			<div class="main-div info-div">
+				<p>[[${#temporals.format(board.getCreateDate(), "yyyy-MM-dd HH:mm")}]]</p>
+				<p>조회수: [[${board.getVisit()}]]</p>
+			</div>
+		</div>
+		<div class="main-div content-div">
+			<div class="content-innerHTML">
+				/* fill on window.onload.. */
+			</div>
+		</div>
+		<div class="main-div control-div">
+			<div class="wrote-user-info">
+				<img style="border-radius: 50%; width: 50px;" th:src="${wroteUser.getPicture()}" />
+				[[${wroteUser.getName()}]]
+			</div>
+			<div class="recommend-div">
+				<button type="button" style="position: sticky;" class="btn btn-secondary">추천하기 👍 <br> [[${board.getRecommend()}]]</button>
+			</div>
+			<div th:if="${user != null && (user.getEmail() == wroteUser.getEmail())}" class="button-div">
+				<a th:href="@{/board/board_write.do(id=${boardId})}"><button type="button" class="btn btn-primary">수정</button></a>
+				<a th:href="@{/board/board_delete.do(id=${boardId})}"><button type="button" class="btn btn-danger">삭제</button></a>
+			</div>
+			<div th:unless="${user != null && (user.getEmail() == wroteUser.getEmail())}" style="width: 120px;">
+			</div>
+		</div>
+		<div class="main-div comment-div">
+		</div>
+	</div>
 </th:block>
 
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 
-
+		$(document).ready(function () {
+			var innerHTML = /*[[${board.getContent()}]]*/ null;
+			$("div.content-innerHTML").html(innerHTML);
+		})
 
 		/*[- end of function -]*/
 		/*]]>*/

@@ -8,18 +8,19 @@
 			[[${board.getContent() == null}]]
 			[[${user.getEmail()}]]
 			[[${board.getId()}]]
-			[[${board.getContent()}]]
 			[[${board.getRole()}]]
 			[[${board.getEmail()}]]
+			[[${board.getContent()}]]
 
 
 			<form th:action="@{/board/register.do}" method="POST" class="board_write_form">
+				<input type="hidden" name="id" th:value="${board.getId()}">
 				<input type="hidden" name="email" th:value="${user.getEmail()}">
 				<input type="hidden" name="writer" th:value="${user.getName()}">
 				<input type="hidden" name="thumbnail">
 				<div class="form-group">
 					<label for="exampleFormControlInput1">Title</label>
-					<input type="text" name="title" class="form-control" placeholder="Put title here...">
+					<input type="text" th:value="${board.getTitle}" name="title" class="form-control" placeholder="Put title here...">
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlSelect1">Example select</label>
@@ -41,7 +42,7 @@
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlTextarea1">Content</label>
-					<textarea id="content" name="content" class="form-control"></textarea>
+					<textarea id="content" name="content" class="form-control">[[${board.getContent}]]</textarea>
 				</div>
 				<div class="board_write_submit_btn">
 					<button type="button" onclick="submit_btn_click();" class="btn btn-primary">Primary</button>

@@ -1,6 +1,7 @@
 package com.widus;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -47,15 +48,19 @@ public class BoardTest {
 	
 	@Test
 	void updateBoard() {
-		BoardSaveRequestDto dto = BoardSaveRequestDto.builder()
-				.title("hello there")
-				.content("asdfasdfasdf")
-				.role(BoardRole.SECRET)
-				.thumbnail("asdfasdfffff")
-				.email("asdfasf@naver.com")
-				.build();
+		Board board = boardRepository.findById(12L).get();
 		
-		boardRepository.save(dto.toEntity());
+		board.boardUpdate("123", "123", BoardRole.FREE, "123");
+		boardRepository.save(board);
+//		BoardSaveRequestDto dto = BoardSaveRequestDto.builder()
+//				.title("hello there")
+//				.content("asdfasdfasdf")
+//				.role(BoardRole.SECRET)
+//				.thumbnail("asdfasdfffff")
+//				.email("asdfasf@naver.com")
+//				.build();
+//		
+//		boardRepository.save(dto.toEntity());
 	}
 	
 	@Test

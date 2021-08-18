@@ -16,6 +16,7 @@ import com.widus.constant.Method;
 import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRole;
 import com.widus.dto.board.BoardSaveRequestDto;
+import com.widus.dto.user.User;
 import com.widus.service.BoardService;
 import com.widus.utils.UiUtils;
 
@@ -65,14 +66,49 @@ public class BoardController extends UiUtils {
 		if (user != null) {
 			model.addAttribute("user", user);
 		}
+		model.addAttribute("boardId", idx);
 		Board board = boardService.getBoardById(idx).get();
 		model.addAttribute("board", board);
+		User wroteUser = boardService.getWroteUser(board.getEmail());
+		model.addAttribute("wroteUser", wroteUser);
 		
 		return "board/board_detail";
 	}
+	
+	@GetMapping(value = "/board_delete.do") 
+	public String openBoard_delete(@RequestParam(value = "id", required = true) Long idx, Model model) {
+		try {
+			Board board = boardService.deleteBoard(idx);
+			if (board == null) {
+				return showMessageWithRedirect("게시글 삭제에 실패했습니다.", "/", Method.GET, null, model);
+			}
+		} catch (DataAccessException e) {
+			return showMessageWithRedirect("데이터베이스 처리 과정 중 문제가 발생했습니다.", "/", Method.GET, null, model);
+		} catch (Exception e) {
+			return showMessageWithRedirect("시스템에 문제가 발생했습니다.", "/", Method.GET, null, model);
+		}
+
+		return showMessageWithRedirect("게시글 삭제가 완료되었습니다.", "/", Method.GET, null, model);
+	}
+	
+//	@PostMapping(value = "/board_update.do")
+//	public String openBoard_update(@LoginUser SessionUser user, Long id, BoardUpdateRequestDto board, Model model) {
+//		try {
+//			Board savedBoard = boardService.updateBoard(board, id);
+//			if (savedBoard == null) {
+//				return showMessageWithRedirect("게시글 업데이트에 실패했습니다.", "/", Method.GET, null, model);
+//			}
+//		} catch (DataAccessException e) {
+//			return showMessageWithRedirect("데이터베이스 처리 과정 중 문제가 발생했습니다.", "/", Method.GET, null, model);
+//		} catch (Exception e) {
+//			return showMessageWithRedirect("시스템에 문제가 발생했습니다.", "/", Method.GET, null, model);
+//		}
+//
+//		return showMessageWithRedirect("게시글 업데이트가 완료되었습니다.", "/", Method.GET, null, model);
+//	}
 
 	@PostMapping(value = "/register.do")
-	public String board_write(@LoginUser SessionUser user, BoardSaveRequestDto board, Model model) {
+	public String board_write(@LoginUser SessionUser user, Long id, BoardSaveRequestDto board, Model model) {
 		// System.out.println(board.getId());
 		try {
 //			System.out.println(board.getWriter());
@@ -81,8 +117,15 @@ public class BoardController extends UiUtils {
 //			System.out.println(board.getTitle());
 //			System.out.println(board.getRole());
 //			System.out.println(board.getThumbnail());
+			Board savedBoard = null;
+			
+			if (id == null) {
+				savedBoard = boardService.saveBoard(board);
+			}
+			else {
+				savedBoard = boardService.saveBoard(board, id);
+			}
 
-			Board savedBoard = boardService.saveBoard(board.toEntity());
 			if (savedBoard == null) {
 				return showMessageWithRedirect("게시글 등록에 실패했습니다.", "/", Method.GET, null, model);
 			}

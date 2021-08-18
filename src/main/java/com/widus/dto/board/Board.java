@@ -53,6 +53,9 @@ public class Board extends BaseTimeEntity {
 	
 	@Column
 	private String thumbnail;
+	
+	@Column(columnDefinition = "int default 0")
+	private String visit;
 
 	@Builder
 	public Board(String title, String content, String writer, String email, BoardRole role, String deleted, String thumbnail) {
@@ -63,6 +66,25 @@ public class Board extends BaseTimeEntity {
 		this.role = role;
 		this.deleted = deleted;
 		this.thumbnail = thumbnail;
+	}
+	
+	@Builder
+	public Board(String title, String content, BoardRole role, String thumbnail) {
+		this.title = title;
+		this.content = content;
+		this.role = role;
+		this.thumbnail = thumbnail;
+	}
+	
+	public void boardUpdate(String title, String content, BoardRole role, String thumbnail) {
+		this.title = title;
+		this.content = content;
+		this.role = role;
+		this.thumbnail = thumbnail;
+	}
+	
+	public void boardDelete() {
+		this.deleted = "Y";
 	}
 	
 	public String getRoleKey() {
