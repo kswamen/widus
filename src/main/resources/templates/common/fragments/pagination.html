@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<nav th:fragment="pagination">
+<nav th:fragment="pagination" th:if="${pagingDto != null and pagingDto.totalRecordCount > 0}">
+	[[${pagingDto.getCriteria().makeQueryString(12)}]]
 	<div class="text-center">
 		<ul class="pagination">
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Previous">
+			<li class="page-item" th:if="${pagingDto.hasPreviousPage == true}" 
+				th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${pagingDto.getCriteria().makeQueryString(pagingDto.firstPage - 1)} ]])">
+				<a class="page-link" href="javascript:void(0)" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
-			<li class="page-item"><a class="page-link" href="#">1</a></li>
-			<li class="page-item"><a class="page-link" href="#">2</a></li>
-			<li class="page-item"><a class="page-link" href="#">3</a></li>
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Next">
+			<li class="page-item" th:each="pageNo : *{#numbers.sequence( pagingDto.firstPage, pagingDto.lastPage )}" th:class="${pageNo == pagingDto.getCriteria().getCurrentPageNo()} ? 'active'">
+				<a class="page-link" href="javascript:void(0)" th:text="${pageNo}" th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${pagingDto.getCriteria().makeQueryString(pageNo)} ]])"></a>
+			</li>
+			<li class="page-item" th:if="${pagingDto.hasNextPage == true}"
+				th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${pagingDto.getCriteria().makeQueryString(pagingDto.lastPage + 1)} ]])">
+				<a class="page-link" href="javascript:void(0)" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>
+
 		</ul>
 	</div>
 </nav>

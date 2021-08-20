@@ -26,7 +26,7 @@ public class Criteria {
 	private String searchType;
 
 	public Criteria() {
-		this.currentPageNo = 0;
+		this.currentPageNo = 1;
 		this.recordsPerPage = 20;
 		this.pageSize = 10;
 	}

@@ -45,6 +45,8 @@ public class BoardController extends UiUtils {
 		
 		PagingDto pagingDto = boardService.getPagingDto(role, criteria);
 		model.addAttribute("pagingDto", pagingDto);
+		
+		System.out.println(pagingDto.getCriteria().makeQueryString(12));
 
 		return "board/board_list";
 	}
