@@ -1,18 +1,18 @@
 package com.widus;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRepository;
 import com.widus.dto.board.BoardRole;
-import com.widus.dto.board.BoardSaveRequestDto;
 import com.widus.dto.user.User;
 import com.widus.dto.user.UserRepository;
 
@@ -38,12 +38,16 @@ public class BoardTest {
 	
 	@Test
 	void getBoardList() {
-		Collection<Board> board = boardRepository.findByParams(BoardRole.FREE);
-		Board[] arr = board.toArray(new Board[board.size()]);
-		System.out.println(board.size());
-		for(int i = 0; i < board.size(); i++) {
-			System.out.println(arr[i].getTitle());
-		}
+		PageRequest pageRequest = PageRequest.of(0, 20);
+		
+		Page<Board> board = boardRepository.findByRole(BoardRole.FREE, pageRequest);
+		List<Board> list = board.getContent();
+	    list.forEach(b -> System.out.println(b.getId() + " " + b.getTitle()));
+	}
+	
+	@Test
+	void getRecordCount() {
+		System.out.println(boardRepository.getRecordCount(BoardRole.FREE));
 	}
 	
 	@Test

@@ -3,6 +3,8 @@ package com.widus.controller;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRole;
 import com.widus.dto.board.BoardSaveRequestDto;
 import com.widus.dto.user.User;
+import com.widus.paging.Criteria;
+import com.widus.paging.PagingDto;
 import com.widus.service.BoardService;
 import com.widus.utils.UiUtils;
 
@@ -29,17 +33,31 @@ public class BoardController extends UiUtils {
 	private final BoardService boardService;
 
 	@GetMapping(value = "/board_list.do")
-	public String openBoard_list(@LoginUser SessionUser user, @RequestParam("division") BoardRole role, Model model) {
+	public String openBoard_list(@LoginUser SessionUser user, @RequestParam("division") BoardRole role, Criteria criteria, Model model) {
 		model.addAttribute("divisionList", BoardRole.values());
 		if (user != null) {
 			model.addAttribute("user", user);
 		}
 		model.addAttribute("division", role);
-
-		List<Board> boardList = boardService.getBoardByParams(role);
+		
+		Page<Board> boardList = boardService.getBoardByRole(role, criteria);
 		model.addAttribute("boardList", boardList);
+		
+		PagingDto pagingDto = boardService.getPagingDto(role, criteria);
+		model.addAttribute("pagingDto", pagingDto);
 
 		return "board/board_list";
+	}
+	
+	@GetMapping(value = "/board_test_list.do")
+	public String board_test() {
+		PageRequest pageRequest = PageRequest.of(36, 20);
+		Page<Board> board = boardService.findAll(pageRequest);
+		
+		List<Board> list = board.getContent();
+	    list.forEach(b -> System.out.println(b.getId() + " " + b.getTitle()));
+
+		return "index";
 	}
 
 	@GetMapping(value = "/board_write.do")

@@ -3,6 +3,14 @@
 	layout:decorator="common/layout/basic">
 
 <th:block layout:fragment="content">
+	totalRecordCount = [[${pagingDto.getTotalRecordCount}]] <br>
+	totalPageCount = [[${pagingDto.getTotalRecordCount}]] <br>
+	firstPage = [[${pagingDto.getTotalRecordCount}]] <br>
+	lastPage = [[${pagingDto.getTotalRecordCount}]] <br>
+	hasPreviousPage = [[${pagingDto.getTotalRecordCount}]] <br>
+	hasNextPage = [[${pagingDto.getTotalRecordCount}]] <br>
+
+	
 	<input type="text" th:value="${division.getKey()}" />
 	<div class="p-5 mb-4 bg-light rounded-3">
 		<div class="container-fluid py-5">

@@ -1,8 +1,10 @@
 package com.widus.service;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,8 @@ import com.widus.dto.board.BoardSaveRequestDto;
 import com.widus.dto.board.BoardUpdateRequestDto;
 import com.widus.dto.user.User;
 import com.widus.dto.user.UserRepository;
+import com.widus.paging.Criteria;
+import com.widus.paging.PagingDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +37,11 @@ public class BoardService {
 	}
 	
 	@Transactional
+	public Page<Board> findAll(PageRequest pageRequest) {
+		return boardRepository.findAll(pageRequest);
+	}
+	
+	@Transactional
 	public Board saveBoard(BoardSaveRequestDto boardSaveRequestDto, Long id) {
 		Board board = boardRepository.findById(id).get();
 		board.boardUpdate(
@@ -43,9 +52,26 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
+//	@Transactional
+//	public Page<Board> getBoardByRole(BoardRole role, Pageable pageable) {
+//		return boardRepository.findByRole(role, pageable);
+//	}
+	
 	@Transactional
-	public List<Board> getBoardByParams(BoardRole role) {
-		return boardRepository.findByParams(role);
+	public Page<Board> getBoardByRole(BoardRole role, Criteria criteria) {
+		// JPA는 인덱스가 0부터 시작하기 때문에 1을 빼 준다.
+		PageRequest pageRequest = PageRequest.of(criteria.getCurrentPageNo() - 1, criteria.getRecordsPerPage());
+		
+		Page<Board> pageBoard = boardRepository.findByRole(role, pageRequest);
+		return pageBoard;
+	}
+	
+	public PagingDto getPagingDto(BoardRole role, Criteria criteria) {
+		int boardTotalCnt = boardRepository.getRecordCount(role);
+		PagingDto pagingDto = new PagingDto(criteria);
+		pagingDto.setTotalRecordCount(boardTotalCnt);
+		
+		return pagingDto;
 	}
 	
 	@Transactional
