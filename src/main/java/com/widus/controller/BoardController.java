@@ -64,8 +64,9 @@ public class BoardController extends UiUtils {
 
 	@GetMapping(value = "/board_write.do")
 	public String openBoard_write(@LoginUser SessionUser user, @RequestParam(value = "id", required = false) Long idx,
-			Model model) {
+			@RequestParam(value = "division", required = false) BoardRole role, Model model) {
 		model.addAttribute("divisionList", BoardRole.values());
+		model.addAttribute("division", role);
 		if (user != null) {
 			model.addAttribute("user", user);
 		}

@@ -24,18 +24,19 @@
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlSelect1">Example select</label>
+					[[${board.getRole==null}]]
 					<select th:if="${board.getRole != null}" class="form-control" id="divisionSelect">
-						<option th:selected="${board.getRole().toString()} == ${division.getKey().toString()}"
-							th:each="division: ${divisionList}" th:key="${division.getKey()}"
-							th:value="${division.getValue()}">
-							[[${division.getValue()}]]
+						<option th:selected="${board.getRole().toString()} == ${d.getKey().toString()}"
+							th:each="d: ${divisionList}" th:key="${d.getKey()}"
+							th:value="${d.getValue()}">
+							[[${d.getValue()}]]
 						</option>
 					</select>
-					<select th:if="${board.getRole == null}" class="form-control" id="divisionSelect">
-						<option
-							th:each="division: ${divisionList}" th:key="${division.getKey()}"
-							th:value="${division.getValue()}">
-							[[${division.getValue()}]]
+					<select th:unless="${board.getRole != null}" class="form-control" id="divisionSelect">
+						<option th:selected="${division.toString()} == ${d.getKey().toString()}"
+							th:each="d: ${divisionList}" th:key="${d.getKey()}"
+							th:value="${d.getValue()}">
+							[[${d.getValue()}]]
 						</option>
 					</select>
 					<input type="hidden" id="role" name="role">

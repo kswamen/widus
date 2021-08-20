@@ -3,14 +3,6 @@
 	layout:decorator="common/layout/basic">
 
 <th:block layout:fragment="content">
-	totalRecordCount = [[${pagingDto.getTotalRecordCount}]] <br>
-	totalPageCount = [[${pagingDto.getTotalRecordCount}]] <br>
-	firstPage = [[${pagingDto.getTotalRecordCount}]] <br>
-	lastPage = [[${pagingDto.getTotalRecordCount}]] <br>
-	hasPreviousPage = [[${pagingDto.getTotalRecordCount}]] <br>
-	hasNextPage = [[${pagingDto.getTotalRecordCount}]] <br>
-
-
 	<input type="text" th:value="${division.getKey()}" />
 	<div class="p-5 mb-4 bg-light rounded-3">
 		<div class="container-fluid py-5">
@@ -48,8 +40,11 @@
 
 			<div class="edit-post">
 				<div class="btn-group" role="group" aria-label="Basic example">
-					<a href="/board/board_write.do"><button type="button" class="btn btn-secondary">Write
-							Post</button></a>
+					<a th:href="@{/board/board_write.do(division=${division})}">
+						<button type="button" class="btn btn-secondary">
+							Write Post
+						</button>
+					</a>
 				</div>
 			</div>
 
