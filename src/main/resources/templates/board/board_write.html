@@ -5,26 +5,18 @@
 <th:block layout:fragment="content">
 	<div class="p-5 mb-4 bg-light rounded-3">
 		<div class="container-fluid py-5">
-			[[${board.getContent() == null}]]
-			[[${user.getEmail()}]]
-			[[${board.getId()}]]
-			[[${board.getRole()}]]
-			[[${board.getEmail()}]]
-			[[${board.getContent()}]]
-
-
 			<form th:action="@{/board/register.do}" method="POST" class="board_write_form">
 				<input type="hidden" name="id" th:value="${board.getId()}">
 				<input type="hidden" name="email" th:value="${user.getEmail()}">
 				<input type="hidden" name="writer" th:value="${user.getName()}">
 				<input type="hidden" name="thumbnail">
+		
 				<div class="form-group">
 					<label for="exampleFormControlInput1">Title</label>
 					<input type="text" th:value="${board.getTitle}" name="title" class="form-control" placeholder="Put title here...">
 				</div>
 				<div class="form-group">
-					<label for="exampleFormControlSelect1">Example select</label>
-					[[${board.getRole==null}]]
+					<label for="exampleFormControlSelect1">Division select</label>
 					<select th:if="${board.getRole != null}" class="form-control" id="divisionSelect">
 						<option th:selected="${board.getRole().toString()} == ${d.getKey().toString()}"
 							th:each="d: ${divisionList}" th:key="${d.getKey()}"

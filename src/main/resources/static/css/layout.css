@@ -27,7 +27,7 @@ nav.navbar {
 }
 
 /* 검색 버튼 및 로그인 버튼 */
-form#menuForm .btn {
+#menuForm .btn {
 	margin-left: 5px;
 }
 .login-btn {
@@ -45,7 +45,7 @@ div.p-5.mb-4 {
 
 
 /* 유저 프로필 이미지 */
-form#menuForm img.user_profile_image {
+#menuForm img.user_profile_image {
 	border-radius: 50%;
 	margin-right: 10px;
 	width: 50px;

@@ -1,6 +1,8 @@
 package com.widus.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -46,14 +48,14 @@ public class BoardController extends UiUtils {
 		PagingDto pagingDto = boardService.getPagingDto(role, criteria);
 		model.addAttribute("pagingDto", pagingDto);
 		
-		System.out.println(pagingDto.getCriteria().makeQueryString(12));
+//		System.out.println(pagingDto.getCriteria().getCurrentPageNo());
 
 		return "board/board_list";
 	}
 	
 	@GetMapping(value = "/board_test_list.do")
 	public String board_test() {
-		PageRequest pageRequest = PageRequest.of(36, 20);
+		PageRequest pageRequest = PageRequest.of(1, 10);
 		Page<Board> board = boardService.findAll(pageRequest);
 		
 		List<Board> list = board.getContent();
@@ -98,18 +100,20 @@ public class BoardController extends UiUtils {
 	
 	@GetMapping(value = "/board_delete.do") 
 	public String openBoard_delete(@RequestParam(value = "id", required = true) Long idx, Model model) {
+		Map<String, Object> pagingParams = new HashMap<>();
 		try {
 			Board board = boardService.deleteBoard(idx);
 			if (board == null) {
 				return showMessageWithRedirect("게시글 삭제에 실패했습니다.", "/", Method.GET, null, model);
 			}
+			pagingParams.put("division", board.getRole());
 		} catch (DataAccessException e) {
 			return showMessageWithRedirect("데이터베이스 처리 과정 중 문제가 발생했습니다.", "/", Method.GET, null, model);
 		} catch (Exception e) {
 			return showMessageWithRedirect("시스템에 문제가 발생했습니다.", "/", Method.GET, null, model);
 		}
 
-		return showMessageWithRedirect("게시글 삭제가 완료되었습니다.", "/", Method.GET, null, model);
+		return showMessageWithRedirect("게시글 삭제가 완료되었습니다.", "/board/board_list.do", Method.GET, pagingParams, model);
 	}
 	
 //	@PostMapping(value = "/board_update.do")
@@ -131,6 +135,8 @@ public class BoardController extends UiUtils {
 	@PostMapping(value = "/register.do")
 	public String board_write(@LoginUser SessionUser user, Long id, BoardSaveRequestDto board, Model model) {
 		// System.out.println(board.getId());
+		Map<String, Object> pagingParams = new HashMap<>();
+		
 		try {
 //			System.out.println(board.getWriter());
 //			System.out.println(board.getContent());
@@ -139,14 +145,14 @@ public class BoardController extends UiUtils {
 //			System.out.println(board.getRole());
 //			System.out.println(board.getThumbnail());
 			Board savedBoard = null;
-			
+			pagingParams.put("division", board.getRole());
 			if (id == null) {
 				savedBoard = boardService.saveBoard(board);
 			}
 			else {
 				savedBoard = boardService.saveBoard(board, id);
 			}
-
+			
 			if (savedBoard == null) {
 				return showMessageWithRedirect("게시글 등록에 실패했습니다.", "/", Method.GET, null, model);
 			}
@@ -156,6 +162,6 @@ public class BoardController extends UiUtils {
 			return showMessageWithRedirect("시스템에 문제가 발생했습니다.", "/", Method.GET, null, model);
 		}
 
-		return showMessageWithRedirect("게시글 등록이 완료되었습니다.", "/", Method.GET, null, model);
+		return showMessageWithRedirect("게시글 등록이 완료되었습니다.", "/board/board_list.do", Method.GET, pagingParams, model);
 	}
 }

@@ -14,7 +14,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	
 	Optional<Board> findById(Long id);
 	
-	@Query(value = "SELECT b FROM Board b WHERE b.role = :role and b.deleted = 'N' order by create_date desc")
+	@Query(value = "SELECT b FROM Board b WHERE b.role = :role and b.deleted = 'N' order by create_date desc, id")
 	Page<Board> findByRole(@Param("role")BoardRole role, Pageable pageable);
 	
 	@Query(value = "SELECT COUNT(*) FROM Board b WHERE b.role = :role and b.deleted = 'N'")

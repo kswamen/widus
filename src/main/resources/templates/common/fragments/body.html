@@ -50,35 +50,23 @@
 					<a class="nav-link disabled" href="#">Disabled</a>
 				</li>
 			</ul>
-			<form id="menuForm" class="form-inline my-2 my-lg-0">
+			<div id="menuForm" class="form-inline my-2 my-lg-0">
 				<img class="user_profile_image" th:if="${user != null}" th:src="${user.getPicture()}" />
 				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 				<div th:if="${user == null}" class="btn-group">
-					<button type="button" class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true"
-						aria-expanded="false">
-						Login
-					</button>
-					<div class="dropdown-menu dropdown-menu-right">
-						<a href="/oauth2/authorization/google">
-							<button class="dropdown-item" type="button">Google</button>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="/oauth2/authorization/kakao">
-							<button class="dropdown-item" type="button">Kakao</button>
-						</a>
-						<div class="dropdown-divider"></div>
-						<a href="/oauth2/authorization/naver">
-							<button class="dropdown-item" type="button">Naver</button>
-						</a>
-					</div>
+					<form th:action="@{/loginPage}" method="GET">
+						<input name="prevPage" id="prevPage" type="hidden">
+						<button type="submit" class="btn btn-outline-primary loginBtn">
+							Login
+						</button>
+					</form>
 				</div>
 				<div th:if="${user != null}">
 					<button id="logout_btn" onClick="logout_confirm()" type="button"
 						class="btn btn-outline-danger">Logout</button>
 				</div>
-			</form>
-
+			</div>
 		</div>
 	</nav>
 
@@ -97,6 +85,9 @@
 
 	<script th:inline="javascript">
 		/*<![CDATA[*/
+		$(document).ready(function () {
+			$("input#prevPage").val(window.location.href);
+		})
 
 		function logout_confirm() {
 			if (confirm("로그아웃하시겠습니까?") == true) {

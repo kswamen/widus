@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import com.widus.auth.CustomLoginSuccessHandler;
 import com.widus.auth.CustomOAuth2UserService;
@@ -34,17 +35,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //	                           "/js/**", "/h2-console/**", "/fonts/**").permitAll()
 //	                   .antMatchers("/api/v1/**").hasRole(Role.USER.name())
 //	                   .anyRequest().authenticated()
+                   .antMatchers("/board/board_write.do").authenticated()
                    	.anyRequest().permitAll()
                .and()
                    .logout()
                        .logoutSuccessUrl("/")
                .and()
 	               .formLogin()
-		               .loginPage("/login")
-		               .successHandler(successHandler())
-		               .permitAll()
+	               		.permitAll()
+	               		.loginPage("/loginPage")
                .and()
                    .oauth2Login()
+                   	   .successHandler(successHandler())
                        .userInfoEndpoint()
                            .userService(customOAuth2UserService);
    }

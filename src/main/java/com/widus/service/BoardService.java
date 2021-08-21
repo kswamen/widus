@@ -1,5 +1,6 @@
 package com.widus.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -61,8 +62,13 @@ public class BoardService {
 	public Page<Board> getBoardByRole(BoardRole role, Criteria criteria) {
 		// JPA는 인덱스가 0부터 시작하기 때문에 1을 빼 준다.
 		PageRequest pageRequest = PageRequest.of(criteria.getCurrentPageNo() - 1, criteria.getRecordsPerPage());
-		
+		//PageRequest pageRequest = PageRequest.of(0, 10);
+//		System.out.println(criteria.getCurrentPageNo() + " " + criteria.getRecordsPerPage());
 		Page<Board> pageBoard = boardRepository.findByRole(role, pageRequest);
+		
+//		List<Board> list = pageBoard.getContent();
+//	    list.forEach(b -> System.out.println(b.getId() + " " + b.getTitle()));
+		
 		return pageBoard;
 	}
 	
