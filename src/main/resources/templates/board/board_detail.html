@@ -37,9 +37,35 @@
 		<div class="main-div recommend-div">
 			<button type="button" class="btn btn-secondary">추천하기 👍 <br> [[${board.getRecommend()}]]</button>
 		</div>
-		<div class="main-div comment-div">
-			<div th:if="${user == null}">
+		<div class="main-div comment-write-div">
+			<div class="comment-not-login" th:if="${user == null}">
 				댓글을 남기려면 로그인해야 합니다.
+			</div>
+			<div class="input-group mb-3 comment-write" th:unless="${user == null}">
+			  <img class="user_profile_image" th:src="${user.getPicture()}" />
+			  <input type="text" class="form-control comment-input" placeholder="댓글을 입력하세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+			  <div class="input-group-append">
+			    <button class="btn btn-outline-secondary" type="button" id="button-addon2">작성</button>
+			  </div>
+			</div>
+		</div>
+		<div class="main-div comments-list-div">
+			<div class="comment-div">
+				<div class="comment-header">
+					<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
+					
+				</div>
+				<div class="comment-content">
+					 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+						  유저 이름
+					 </div>
+					 <input type="text" class="form-control" readonly aria-label="Username" value="asdf">
+				</div>
+				<div class="comment-control-btn">
+					<button type="button" class="btn btn-outline-primary">수정</button>
+					<button type="button" class="btn btn-outline-danger">삭제</button>
+					<button type="button" class="btn btn-outline-info">댓글 열기</button>
+				</div>
 			</div>
 		</div>
 	</div>
