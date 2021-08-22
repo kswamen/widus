@@ -53,18 +53,39 @@
 			<div class="comment-div">
 				<div class="comment-header">
 					<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
-					
 				</div>
 				<div class="comment-content">
 					 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
 						  유저 이름
 					 </div>
-					 <input type="text" class="form-control" readonly aria-label="Username" value="asdf">
+					 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
+					 <div class="div-open-comment">
+					 	<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+					    	댓글창 토글
+					 	</button>
+					 </div>
 				</div>
 				<div class="comment-control-btn">
 					<button type="button" class="btn btn-outline-primary">수정</button>
 					<button type="button" class="btn btn-outline-danger">삭제</button>
-					<button type="button" class="btn btn-outline-info">댓글 열기</button>
+					<button type="button" class="btn btn-outline-info">댓글</button>
+				</div>
+			</div>
+			<div class="collapse" id = "collapseExample">
+				<div class="nested-comment-div">
+					<div class="comment-header">
+						<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
+					</div>
+					<div class="comment-content">
+						 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+							  유저 이름
+						 </div>
+						 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
+					</div>
+					<div class="comment-control-btn">
+						<button type="button" class="btn btn-outline-primary">수정</button>
+						<button type="button" class="btn btn-outline-danger">삭제</button>
+					</div>
 				</div>
 			</div>
 		</div>

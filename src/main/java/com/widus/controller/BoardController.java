@@ -20,6 +20,7 @@ import com.widus.constant.Method;
 import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRole;
 import com.widus.dto.board.BoardSaveRequestDto;
+import com.widus.dto.comment.Comment;
 import com.widus.dto.user.User;
 import com.widus.paging.Criteria;
 import com.widus.paging.PagingDto;

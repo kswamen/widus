@@ -90,6 +90,10 @@ div.comment-div {
 	
 }
 
+input.comment-show {
+	min-height: 100px;
+}
+
 div.comment-header {
 	display: flex;
 	flex-direction: column;
@@ -106,9 +110,16 @@ div.comment-header img {
 	border-radius: 50%;
 }
 
+div.div-open-comment {
+	margin-top: 10px;
+	margin-left: auto;
+}
+
+
 div.comment-control-btn {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 }
 
 div.comment-control-btn button {
@@ -134,3 +145,10 @@ div.comment-content input {
 .comments-list-div div:nth-child(1) { flex-grow: 0; }
 .comments-list-div div:nth-child(2) { flex-grow: 1; }
 .comments-list-div div:nth-child(3) { flex-grow: 0; }
+
+/* 대댓글 영역 */
+div.nested-comment-div {
+	display:flex;
+	width: 80vw;
+	margin-left: auto;
+}
