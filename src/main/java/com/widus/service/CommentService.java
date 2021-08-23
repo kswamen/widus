@@ -18,11 +18,23 @@ public class CommentService {
 	
 	@Transactional
 	public Comment saveComment(CommentSaveRequestDto comment) {
-		return commentRepository.save(comment.toEntity());
+		Comment newComment = comment.toEntity();
+		System.out.println(newComment.getBoardId());
+		newComment = commentRepository.save(newComment);
+		System.out.println(newComment.getBoardId());
+		return newComment;
 	}
 	
 	@Transactional
 	public List<Comment> getCommentList(Long boardId) {
 		return commentRepository.findByBoardId(boardId);
+	}
+	
+	@Transactional
+	public Comment deleteComment(Long commentId){
+		Comment comment = commentRepository.findById(commentId).get();
+		comment.commentDelete();
+		
+		return commentRepository.save(comment);
 	}
 }

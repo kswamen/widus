@@ -65,7 +65,9 @@ div.comment-not-login {
 div.comment-write {
 	padding: 15px;
 	align-items: center;
+	justify-content: flex-end;
 	margin-bottom: 0px !important;
+	display: flex;
 }
 
 .user_profile_image {
@@ -151,4 +153,10 @@ div.nested-comment-div {
 	display:flex;
 	width: 80vw;
 	margin-left: auto;
+}
+
+
+/* 모달창 영역 */
+div#commentModal {
+	
 }

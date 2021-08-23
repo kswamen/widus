@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CommentSaveRequestDto {
+	private Long id;
 	private String content;
 	private String writer;
 	private String email;
@@ -16,7 +17,8 @@ public class CommentSaveRequestDto {
 	private Long boardId;
 	
 	@Builder
-	public CommentSaveRequestDto(String content, String writer, String email, String picture, String deleted, Long nested, Long boardId) {
+	public CommentSaveRequestDto(Long id, String content, String writer, String email, String picture, String deleted, Long nested, Long boardId) {
+		this.id = id;
 		this.content = content;
 		this.writer = writer;
 		this.email = email;
@@ -28,6 +30,7 @@ public class CommentSaveRequestDto {
 	
 	public Comment toEntity() {
 		return Comment.builder()
+				.id(id)
 				.content(content)
 				.writer(writer)
 				.email(email)

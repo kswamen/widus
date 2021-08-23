@@ -45,11 +45,14 @@
 				댓글을 남기려면 로그인해야 합니다.
 			</div>
 			<div class="input-group mb-3 comment-write" th:unless="${user == null}">
+				<button type="button" th:onclick="openModal(0, [[${user.name}]], '', 0);" class="btn btn-primary">댓글 작성하기</button>
+			<!--
 			  <img class="user_profile_image" th:src="${user.getPicture()}" />
 			  <input type="text" class="form-control comment-input" placeholder="댓글을 입력하세요" aria-label="Recipient's username" aria-describedby="button-addon2">
 			  <div class="input-group-append">
 			    <button class="btn btn-outline-secondary" type="button" id="button-addon2">작성</button>
 			  </div>
+			 -->
 			</div>
 		</div>
 		<div class="main-div comments-list-div">
@@ -77,6 +80,36 @@
 	</div>
 </th:block>
 
+<th:block layout:fragment="modal">
+	<div id="commentModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-xl" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <form>
+	                    <div class="form-group">
+	                        <label for="modalWriter" class="col-form-label">작성자</label>
+	                        <input type="text" id="modalWriter" disabled class="form-control" placeholder="작성자를 입력해 주세요." />
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="modalContent" class="col-form-label">내용</label>
+	                        <textarea id="modalContent" class="form-control" placeholder="내용을 입력해 주세요."></textarea>
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" id="btnModalCancel" class="btn btn-default waves-effect waves-light" data-dismiss="modal">취소하기</button>
+	                <button type="button" id="btnCommentUpdate" class="btn btn-primary waves-effect waves-light" onclick="updateComment()">수정하기</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</th:block>
+
 <th:block layout:fragment="script">
 	<script th:src="@{/scripts/common.js}"></script>
 	<script th:inline="javascript">
@@ -88,14 +121,76 @@
 			
 			printCommentList();
 		});
+		
+		function openModal(idx, writer, content, nested) {
+
+			$("#commentModal").modal("toggle");
+	
+			document.getElementById("modalWriter").value = writer;
+			document.getElementById("modalContent").value = content;
+	
+			document.getElementById("btnCommentUpdate").setAttribute("onclick", "updateComment("+ idx +"," + nested +")");
+		}
+		
+		function updateComment(idx, nested) {
+			var writer = document.getElementById("modalWriter");
+			var content = document.getElementById("modalContent");
+		
+			var uri = /*[[@{/comment/register.do}]]*/ null;
+			var email = /*[[${user?.email}]]*/ null;
+			var picture = /*[[${user?.picture}]]*/ null;
+			var boardId = /*[[${board.id}]]*/ null;
+			
+			/*
+			console.log(idx);
+			console.log(writer.value);
+			console.log(content.value);
+			console.log(email);
+			console.log(picture);
+			console.log(boardId);
+			console.log(nested);
+			*/
+
+			var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "PATCH"};
+			var params = {
+				"id": idx, 
+				"writer": writer.value, 
+				"content": content.value,
+				"email": email,
+				"picture": picture,
+				"boardId": boardId,
+				"nested": nested,
+				"deleted": 'N',
+			};
+		
+			$.ajax({
+				url: uri,
+				type: "PATCH",
+				headers: headers,
+				dataType: "json",
+				data: JSON.stringify(params),
+				success: function(response) {
+					if (response.result == false) {
+						alert("댓글 수정에 실패하였습니다.");
+						return false;
+					}
+		
+					printCommentList();
+					$("#commentModal").modal("hide");
+				},
+				error: function(xhr, status, error) {
+					alert("에러가 발생하였습니다.");
+					return false;
+				}
+			});
+		}
 	
 		function printCommentList() {
 	
 			var uri = /*[[ @{/comment/list.do?boardId=} + ${board.getId()} ]]*/ null;
 	
 			$.get(uri, function(response) {
-				console.log(response)
-				if (isEmpty(response) == false) {
+				if (/*isEmpty(response) == false*/true) {
 					var commentsHtml = "";
 					var isLoggedIn = /*[[${user != null}]]*/ null;
 					var userEmail = $("input#userEmailInput").val();
@@ -116,19 +211,35 @@
 							commentsHtml += `<button type="button" class="btn btn-outline-info btn-nested-comment">댓글</button>`;
 						}
 						commentsHtml += `
-								 	<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+								 	<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample${idx}" aria-expanded="false" aria-controls="collapseExample${idx}">
 								    	댓글창 토글
 								 	</button>
 								 </div>
 							</div>
 							<div class="comment-control-btn">`;
-						console.log(userEmail, comment.email);
 						if (userEmail == comment.email) {
 							commentsHtml += `
-								<button type="button" class="btn btn-outline-primary">수정</button>
-								<button type="button" class="btn btn-outline-danger">삭제</button>`;
+								<button type="button" onclick="openModal(${comment.id}, '${comment.writer}', '${comment.content}', 0);" class="btn btn-outline-primary" onclick=>수정</button>
+								<button type="button" onclick="deleteComment(${comment.id})" class="btn btn-outline-danger">삭제</button>`;
 						}
 						commentsHtml += `
+							</div>
+						</div>
+						<div class="collapse" id = "collapseExample${idx}">
+							<div class="nested-comment-div">
+								<div class="comment-header">
+									<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
+								</div>
+								<div class="comment-content">
+									 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+										  유저 이름
+									 </div>
+									 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
+								</div>
+								<div class="comment-control-btn">
+									<button type="button" class="btn btn-outline-primary">수정</button>
+									<button type="button" class="btn btn-outline-danger">삭제</button>
+								</div>
 							</div>
 						</div>
 						`;
@@ -137,6 +248,35 @@
 					$("div.comments-list-div").html(commentsHtml);
 				}
 			}, "json");
+		}
+		
+		function deleteComment(commentId) {
+			if (!confirm('댓글을 삭제하시겠어요?')) {
+				return false;
+			}
+			
+			var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "DELETE"};
+			var uri = /*[[@{/comment/delete.do/}]]*/ null;
+			uri += commentId;
+			console.log(uri);
+		
+			$.ajax({
+				url: uri,
+				type: "DELETE",
+				headers: headers,
+				dataType: "json",
+				success: function(response) {
+					if (response.result == false) {
+						alert("댓글 삭제에 실패하였습니다.");
+						return false;
+					}
+					printCommentList();
+				},
+				error: function(xhr, status, error) {
+					alert("에러가 발생하였습니다.");
+					return false;
+				}
+			});
 		}
 
 		/*[- end of function -]*/
