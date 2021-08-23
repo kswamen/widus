@@ -6,6 +6,9 @@
 
 <th:block layout:fragment="content">
 	<div class="container-div">
+		<input id="userEmailInput" type="hidden" th:if="${user != null}" th:value="${user.email}">
+		<input id="userEmailInput" type="hidden" th:unless="${user != null}" value="null">
+		
 		<div class="card main-div title-div">
 			<div class="card-body">
 				[[${board.getTitle()}]]
@@ -50,56 +53,91 @@
 			</div>
 		</div>
 		<div class="main-div comments-list-div">
-			<div class="comment-div">
-				<div class="comment-header">
-					<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
-				</div>
-				<div class="comment-content">
-					 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
-						  유저 이름
-					 </div>
-					 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
-					 <div class="div-open-comment">
-					 	<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-					    	댓글창 토글
-					 	</button>
-					 </div>
-				</div>
-				<div class="comment-control-btn">
-					<button type="button" class="btn btn-outline-primary">수정</button>
-					<button type="button" class="btn btn-outline-danger">삭제</button>
-					<button type="button" class="btn btn-outline-info">댓글</button>
-				</div>
-			</div>
-			<div class="collapse" id = "collapseExample">
-				<div class="nested-comment-div">
-					<div class="comment-header">
-						<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
-					</div>
-					<div class="comment-content">
-						 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
-							  유저 이름
-						 </div>
-						 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
-					</div>
-					<div class="comment-control-btn">
-						<button type="button" class="btn btn-outline-primary">수정</button>
-						<button type="button" class="btn btn-outline-danger">삭제</button>
+			
+			<!--
+				<div class="collapse" id = "collapseExample">
+					<div class="nested-comment-div">
+						<div class="comment-header">
+							<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
+						</div>
+						<div class="comment-content">
+							 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+								  유저 이름
+							 </div>
+							 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
+						</div>
+						<div class="comment-control-btn">
+							<button type="button" class="btn btn-outline-primary">수정</button>
+							<button type="button" class="btn btn-outline-danger">삭제</button>
+						</div>
 					</div>
 				</div>
-			</div>
+			-->
 		</div>
 	</div>
 </th:block>
 
 <th:block layout:fragment="script">
+	<script th:src="@{/scripts/common.js}"></script>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 
 		$(document).ready(function () {
 			var innerHTML = /*[[${board.getContent()}]]*/ null;
 			$("div.content-innerHTML").html(innerHTML);
-		})
+			
+			printCommentList();
+		});
+	
+		function printCommentList() {
+	
+			var uri = /*[[ @{/comment/list.do?boardId=} + ${board.getId()} ]]*/ null;
+	
+			$.get(uri, function(response) {
+				console.log(response)
+				if (isEmpty(response) == false) {
+					var commentsHtml = "";
+					var isLoggedIn = /*[[${user != null}]]*/ null;
+					var userEmail = $("input#userEmailInput").val();
+					
+					$(response).each(function(idx, comment) {
+						commentsHtml += `
+						<div class="comment-div">
+							<div class="comment-header">
+								<img style="border-radius: 50%;" src="${comment.picture}" />
+							</div>
+							<div class="comment-content">
+								 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+									  ${comment.writer}
+								 </div>
+								 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="${comment.content}">
+								 <div class="div-open-comment">`;
+						if (isLoggedIn) {
+							commentsHtml += `<button type="button" class="btn btn-outline-info btn-nested-comment">댓글</button>`;
+						}
+						commentsHtml += `
+								 	<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+								    	댓글창 토글
+								 	</button>
+								 </div>
+							</div>
+							<div class="comment-control-btn">`;
+						console.log(userEmail, comment.email);
+						if (userEmail == comment.email) {
+							commentsHtml += `
+								<button type="button" class="btn btn-outline-primary">수정</button>
+								<button type="button" class="btn btn-outline-danger">삭제</button>`;
+						}
+						commentsHtml += `
+							</div>
+						</div>
+						`;
+					});
+					
+					$("div.comments-list-div").html(commentsHtml);
+				}
+			}, "json");
+		}
 
 		/*[- end of function -]*/
 		/*]]>*/

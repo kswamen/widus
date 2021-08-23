@@ -45,11 +45,12 @@ public class Comment extends BaseTimeEntity{
 	private Long boardId;
 	
 	@Builder
-	public Comment(String content, String writer, String email, String picture, Long nested, Long boardId) {
+	public Comment(String content, String writer, String email, String picture, String deleted, Long nested, Long boardId) {
 		this.content = content;
 		this.writer = writer;
 		this.email = email;
 		this.picture = picture;
+		this.deleted = deleted;
 		this.nested = nested;
 		this.boardId = boardId;
 	}

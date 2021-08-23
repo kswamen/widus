@@ -1,5 +1,7 @@
 package com.widus;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,5 +30,13 @@ public class CommentTest {
 				.email("kswamen@naver.com")
 				.boardId(12L)
 				.build());
+	}
+	
+	@Test
+	void getCommentList() {
+		List<Comment> ls = commentRepository.findByBoardId(14L);
+		for(Comment c: ls) {
+			System.out.println(c.getContent());
+		}
 	}
 }
