@@ -5,6 +5,7 @@
 /* 좋아요 테이블을 만들 때 좋아요를 누른 인원에 대해 스트링 형태로 전달한 후 나중에 리스트로 파싱 */
 
 <th:block layout:fragment="content">
+	<button onclick="testfor();">asdfasd</button>
 	<div class="container-div">
 		<input id="userEmailInput" type="hidden" th:if="${user != null}" th:value="${user.email}">
 		<input id="userEmailInput" type="hidden" th:unless="${user != null}" value="null">
@@ -120,6 +121,7 @@
 			$("div.content-innerHTML").html(innerHTML);
 			
 			printCommentList();
+			
 		});
 		
 		function openModal(idx, writer, content, nested) {
@@ -186,18 +188,18 @@
 		}
 	
 		function printCommentList() {
-	
 			var uri = /*[[ @{/comment/list.do?boardId=} + ${board.getId()} ]]*/ null;
-	
+
 			$.get(uri, function(response) {
 				if (/*isEmpty(response) == false*/true) {
-					var commentsHtml = "";
 					var isLoggedIn = /*[[${user != null}]]*/ null;
+					var userName = /*[[${user.name}]]*/ null;
 					var userEmail = $("input#userEmailInput").val();
+					var commentsHtml = "";
 					
 					$(response).each(function(idx, comment) {
 						commentsHtml += `
-						<div class="comment-div">
+						<div class="comment-div" id="${comment.id}">
 							<div class="comment-header">
 								<img style="border-radius: 50%;" src="${comment.picture}" />
 							</div>
@@ -208,10 +210,10 @@
 								 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="${comment.content}">
 								 <div class="div-open-comment">`;
 						if (isLoggedIn) {
-							commentsHtml += `<button type="button" class="btn btn-outline-info btn-nested-comment">댓글</button>`;
+							commentsHtml += `<button type="button" onclick="openModal(0, '${userName}', '', ${comment.id});" class="btn btn-outline-info btn-nested-comment">댓글</button>`;
 						}
 						commentsHtml += `
-								 	<button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#collapseExample${idx}" aria-expanded="false" aria-controls="collapseExample${idx}">
+								 	<button class="btn btn-outline-secondary" onclick="nestedCommentPrint(${comment.id});" type="button">
 								    	댓글창 토글
 								 	</button>
 								 </div>
@@ -225,29 +227,56 @@
 						commentsHtml += `
 							</div>
 						</div>
-						<div class="collapse" id = "collapseExample${idx}">
-							<div class="nested-comment-div">
-								<div class="comment-header">
-									<img style="border-radius: 50%;" src="https://placeimg.com/50/50/any/grayscale" />
-								</div>
-								<div class="comment-content">
-									 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
-										  유저 이름
-									 </div>
-									 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="asdf">
-								</div>
-								<div class="comment-control-btn">
-									<button type="button" class="btn btn-outline-primary">수정</button>
-									<button type="button" class="btn btn-outline-danger">삭제</button>
-								</div>
-							</div>
-						</div>
-						`;
+						<div class="nested-comment-div-list-${comment.id}">
+							
+						</div>`;
+						$("div.comments-list-div").html(commentsHtml);
 					});
-					
-					$("div.comments-list-div").html(commentsHtml);
 				}
-			}, "json");
+			}, "json").done(function() {
+				var next_uri = /*[[ @{/comment/nested/list.do?boardId=} + ${board.getId()} ]]*/ null;
+				var userEmail = $("input#userEmailInput").val();
+	
+				$.get(next_uri, function(response) {
+					if (/*isEmpty(response) == false*/true) {
+						console.log(response.length);
+						$(response).each(function(idx, comment) {
+							var commentsHtml = "";
+							var parentCommentId = comment.nested;
+							var target = "div.nested-comment-div-list-" + parentCommentId;
+							commentsHtml += `
+								<div class="nested-comment-div">
+									<div class="comment-header">
+										<img style="border-radius: 50%;" src="${comment.picture}" />
+									</div>
+									<div class="comment-content">
+										 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+											  ${comment.writer}
+										 </div>
+										 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="${comment.content}">
+									</div>
+									<div class="comment-control-btn">
+										`;
+									if (userEmail == comment.email) {
+										commentsHtml += `
+											<button type="button" onclick="openModal(${comment.id}, '${comment.writer}', '${comment.content}', ${comment.nested});" class="btn btn-outline-primary" onclick=>수정</button>
+											<button type="button" onclick="deleteComment(${comment.id})" class="btn btn-outline-danger">삭제</button>
+										`;
+									}
+							commentsHtml += `
+									</div>
+								</div>
+							`;
+							$(target).append(commentsHtml);
+						});
+					}
+				});
+			});
+		}
+		
+		function nestedCommentPrint(parentCommentId) {
+			var target = "div.nested-comment-div-list-" + parentCommentId;
+			$(target).toggle();
 		}
 		
 		function deleteComment(commentId) {
@@ -258,7 +287,6 @@
 			var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "DELETE"};
 			var uri = /*[[@{/comment/delete.do/}]]*/ null;
 			uri += commentId;
-			console.log(uri);
 		
 			$.ajax({
 				url: uri,

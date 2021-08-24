@@ -17,17 +17,28 @@ public class CommentService {
 	private final CommentRepository commentRepository;
 	
 	@Transactional
-	public Comment saveComment(CommentSaveRequestDto comment) {
-		Comment newComment = comment.toEntity();
-		System.out.println(newComment.getBoardId());
-		newComment = commentRepository.save(newComment);
-		System.out.println(newComment.getBoardId());
-		return newComment;
+	public Comment saveComment(CommentSaveRequestDto commentSaveRequestDto) {
+		if (commentSaveRequestDto.getId() == 0) {
+			return commentRepository.save(commentSaveRequestDto.toEntity());
+		}
+		
+		else {
+			Comment comment = commentRepository.findById(commentSaveRequestDto.getId()).get();
+			comment.commentUpdate(
+					commentSaveRequestDto.getContent(),
+					commentSaveRequestDto.getPicture());
+			return commentRepository.save(comment);
+		}
 	}
 	
 	@Transactional
 	public List<Comment> getCommentList(Long boardId) {
 		return commentRepository.findByBoardId(boardId);
+	}
+	
+	@Transactional
+	public List<Comment> getNestedCommentList(Long boardId) {
+		return commentRepository.findByBoardIdNested(boardId);
 	}
 	
 	@Transactional

@@ -56,6 +56,11 @@ public class Comment extends BaseTimeEntity{
 		this.boardId = boardId;
 	}
 	
+	public void commentUpdate(String content, String picture) {
+		this.content = content;
+		this.picture = picture;
+	}
+	
 	public void commentDelete() {
 		this.deleted = "Y";
 	}

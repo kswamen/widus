@@ -25,17 +25,17 @@ public class CommentController {
 	
 	@RequestMapping(value = "/register.do", method = {RequestMethod.POST, RequestMethod.PATCH})
     public Comment commentRegister(@RequestBody final CommentSaveRequestDto comment) {
-		System.out.println("at controller: " + comment.getBoardId());
-		System.out.println(comment.getContent());
-		System.out.println(comment.getEmail());
-		System.out.println(comment.getWriter());
-		
         return commentService.saveComment(comment);
     }
 	
 	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
 	public List<Comment> getCommentList(@RequestParam(value = "boardId", required = true)Long boardId) {
 		return commentService.getCommentList(boardId);
+	}
+	
+	@RequestMapping(value = "/nested/list.do", method = RequestMethod.GET)
+	public List<Comment> getNestedCommentList(@RequestParam(value = "boardId", required = true)Long boardId) {
+		return commentService.getNestedCommentList(boardId);
 	}
 	
 	@DeleteMapping(value = "/delete.do/{id}")
