@@ -5,7 +5,6 @@
 /* 좋아요 테이블을 만들 때 좋아요를 누른 인원에 대해 스트링 형태로 전달한 후 나중에 리스트로 파싱 */
 
 <th:block layout:fragment="content">
-	<button onclick="testfor();">asdfasd</button>
 	<div class="container-div">
 		<input id="userEmailInput" type="hidden" th:if="${user != null}" th:value="${user.email}">
 		<input id="userEmailInput" type="hidden" th:unless="${user != null}" value="null">
@@ -104,7 +103,7 @@
 	            </div>
 	            <div class="modal-footer">
 	                <button type="button" id="btnModalCancel" class="btn btn-default waves-effect waves-light" data-dismiss="modal">취소하기</button>
-	                <button type="button" id="btnCommentUpdate" class="btn btn-primary waves-effect waves-light" onclick="updateComment()">수정하기</button>
+	                <button type="button" id="btnCommentUpdate" class="btn btn-primary waves-effect waves-light" onclick="updateComment()">등록하기</button>
 	            </div>
 	        </div>
 	    </div>
@@ -192,8 +191,9 @@
 
 			$.get(uri, function(response) {
 				if (/*isEmpty(response) == false*/true) {
+					console.log("in function");
 					var isLoggedIn = /*[[${user != null}]]*/ null;
-					var userName = /*[[${user.name}]]*/ null;
+					var userName = /*[[${user?.name}]]*/ null;
 					var userEmail = $("input#userEmailInput").val();
 					var commentsHtml = "";
 					
@@ -230,8 +230,8 @@
 						<div class="nested-comment-div-list-${comment.id}">
 							
 						</div>`;
-						$("div.comments-list-div").html(commentsHtml);
 					});
+					$("div.comments-list-div").html(commentsHtml);
 				}
 			}, "json").done(function() {
 				var next_uri = /*[[ @{/comment/nested/list.do?boardId=} + ${board.getId()} ]]*/ null;
