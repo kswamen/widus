@@ -15,15 +15,16 @@ public class BoardSaveRequestDto {
 	private String thumbnail;
 	private String email;
 
-	@Builder
-	public BoardSaveRequestDto(String title, String content, String writer, BoardRole role, String thumbnail, String email) {
-		this.title = title;
-		this.content = content;
-		this.role = role;
-		this.writer = writer;
-		this.thumbnail = thumbnail;
-		this.email = email;
-	}
+// 빌더 패턴이 필요한가?
+//	@Builder
+//	public BoardSaveRequestDto(String title, String content, String writer, BoardRole role, String thumbnail, String email) {
+//		this.title = title;
+//		this.content = content;
+//		this.role = role;
+//		this.writer = writer;
+//		this.thumbnail = thumbnail;
+//		this.email = email;
+//	}
 	
 	public Board toEntity() {
 		return Board.builder()

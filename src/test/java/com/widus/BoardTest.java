@@ -1,6 +1,7 @@
 package com.widus;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -13,6 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRepository;
 import com.widus.dto.board.BoardRole;
+import com.widus.dto.board.recommendation.BoardRecommend;
+import com.widus.dto.board.recommendation.BoardRecommendRepository;
+import com.widus.dto.board.recommendation.RecommendId;
 import com.widus.dto.user.User;
 import com.widus.dto.user.UserRepository;
 
@@ -23,6 +27,9 @@ public class BoardTest {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BoardRecommendRepository boardRecommendRepository;
 	
 	@Test
 	void insertBoard() {
@@ -48,6 +55,37 @@ public class BoardTest {
 	@Test
 	void getRecordCount() {
 		System.out.println(boardRepository.getRecordCount(BoardRole.FREE));
+	}
+	
+	@Test
+	void insertRecommend() {
+		BoardRecommend b = BoardRecommend.builder().boardId(1)
+				.userEmail("asdf@naver.com").build();
+		boardRecommendRepository.save(b);
+	}
+	
+	@Test
+	void findRecommend() {
+		RecommendId a = new RecommendId(2, "asdf@naver.com");
+		Optional<BoardRecommend> b = boardRecommendRepository.findById(a);
+		System.out.println(b.equals(Optional.empty()));
+//		System.out.println(b.get().getBoardId());
+//		System.out.println(b.get().getUserEmail());
+	}
+	
+	@Test
+	void toggleRecommend() {
+		RecommendId a = new RecommendId(1, "asdf@naver.com");
+		Optional<BoardRecommend> b = boardRecommendRepository.findById(a);
+		
+		BoardRecommend new_b = b.get();
+		new_b.toggleRecommend();
+		boardRecommendRepository.save(new_b);
+	}
+	
+	@Test
+	void countRecommend() {
+		System.out.println(boardRecommendRepository.getRecommendCount(510));
 	}
 	
 	@Test

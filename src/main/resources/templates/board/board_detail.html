@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<div class="main-div recommend-div">
-			<button type="button" class="btn btn-secondary">추천하기 👍 <br> [[${board.getRecommend()}]]</button>
+			<button type="button" class="btn btn-secondary" id="recommendBtn" onclick="recommend_btn_click();">추천하기 👍 <br> <span>[[${totalRecommended}]]</span></button>
 		</div>
 		<div class="main-div comment-write-div">
 			<div class="comment-not-login" th:if="${user == null}">
@@ -120,7 +120,7 @@
 			$("div.content-innerHTML").html(innerHTML);
 			
 			printCommentList();
-			
+			updateRecommend();
 		});
 		
 		function openModal(idx, writer, content, nested) {
@@ -141,16 +141,6 @@
 			var email = /*[[${user?.email}]]*/ null;
 			var picture = /*[[${user?.picture}]]*/ null;
 			var boardId = /*[[${board.id}]]*/ null;
-			
-			/*
-			console.log(idx);
-			console.log(writer.value);
-			console.log(content.value);
-			console.log(email);
-			console.log(picture);
-			console.log(boardId);
-			console.log(nested);
-			*/
 
 			var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "PATCH"};
 			var params = {
@@ -163,12 +153,14 @@
 				"nested": nested,
 				"deleted": 'N',
 			};
+			
+			console.log(JSON.stringify(params));
 		
 			$.ajax({
 				url: uri,
 				type: "PATCH",
 				headers: headers,
-				dataType: "json",
+				// dataType: "json",
 				data: JSON.stringify(params),
 				success: function(response) {
 					if (response.result == false) {
@@ -204,7 +196,7 @@
 								<img style="border-radius: 50%;" src="${comment.picture}" />
 							</div>
 							<div class="comment-content">
-								 <div class="badge badge-secondary badge-pill text-wrap" style="width: 6rem;">
+								 <div class="badge badge-secondary badge-pill text-wrap writer-name-div" style="width: 6rem; text-overflow: ellipsis;">
 									  ${comment.writer}
 								 </div>
 								 <input type="text" class="form-control comment-show" readonly aria-label="Username" value="${comment.content}">
@@ -305,6 +297,67 @@
 					return false;
 				}
 			});
+		}
+		
+		function recommend_btn_click() {
+			var isLoggedIn = /*[[${user != null}]]*/ null;
+			if (!isLoggedIn) {
+				alert("추천하려면 먼저 로그인해야 합니다.");
+				return;
+			}
+			
+			var writer_email = /*[[${board.getEmail()}]]*/ null;
+			var user_email = /*[[${user?.getEmail()}]]*/ null;
+			if (writer_email == user_email) {
+				alert("작성자는 해당 게시글을 추천할 수 없습니다.");
+				return;
+			}
+			
+			if (!confirm("게시글을 추천하시겠습니까? 이미 추천한 경우 추천을 취소합니다.")) {
+				return
+			}
+			
+			var uri = /*[[@{/boardRecommend/recommend.do}]]*/ null;
+			var boardId = /*[[${board.id}]]*/ null;
+
+			var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "PATCH"};
+			var params = {
+				"boardId": boardId,
+				"userEmail": user_email,
+			};
+			
+			var data = JSON.stringify(params);
+		
+			$.ajax({
+				url: uri,
+				type: "PATCH",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function(response) {
+					if (response.result == false) {
+						alert("동작에 실패하였습니다.");
+						return false;
+					}
+
+					updateRecommend();
+				},
+				error: function(xhr, status, error) {
+					alert("에러가 발생하였습니다.");
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+					return false;
+				}
+			});
+		}
+		
+		function updateRecommend() {
+			var t = $("#recommendBtn span");
+			
+			var uri = /*[[ @{/boardRecommend/totalRecommend.do?boardId=} + ${board.getId()} ]]*/ null;
+			$.get(uri, function(response) {
+				t.text(response);
+			})
 		}
 
 		/*[- end of function -]*/

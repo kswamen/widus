@@ -13,7 +13,6 @@ import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRepository;
 import com.widus.dto.board.BoardRole;
 import com.widus.dto.board.BoardSaveRequestDto;
-import com.widus.dto.board.BoardUpdateRequestDto;
 import com.widus.dto.user.User;
 import com.widus.dto.user.UserRepository;
 import com.widus.paging.Criteria;
@@ -83,17 +82,6 @@ public class BoardService {
 	@Transactional
 	public User getWroteUser(String email) {
 		return userRepository.findByEmail(email);
-	}
-
-	@Transactional
-	public Board updateBoard(BoardUpdateRequestDto boardUpdateRequestDto, Long id) {
-		Board board = boardRepository.findById(id).get();
-		board.boardUpdate(
-				boardUpdateRequestDto.getTitle(),
-				boardUpdateRequestDto.getContent(), 
-				boardUpdateRequestDto.getRole(), 
-				boardUpdateRequestDto.getThumbnail());
-		return boardRepository.save(board);
 	}
 	
 	@Transactional

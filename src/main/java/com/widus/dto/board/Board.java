@@ -68,14 +68,6 @@ public class Board extends BaseTimeEntity {
 		this.thumbnail = thumbnail;
 	}
 	
-	@Builder
-	public Board(String title, String content, BoardRole role, String thumbnail) {
-		this.title = title;
-		this.content = content;
-		this.role = role;
-		this.thumbnail = thumbnail;
-	}
-	
 	public void boardUpdate(String title, String content, BoardRole role, String thumbnail) {
 		this.title = title;
 		this.content = content;

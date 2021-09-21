@@ -16,17 +16,17 @@ public class CommentSaveRequestDto {
 	private Long nested;
 	private Long boardId;
 	
-	@Builder
-	public CommentSaveRequestDto(Long id, String content, String writer, String email, String picture, String deleted, Long nested, Long boardId) {
-		this.id = id;
-		this.content = content;
-		this.writer = writer;
-		this.email = email;
-		this.picture = picture;
-		this.deleted = deleted;
-		this.nested = nested;
-		this.boardId = boardId;
-	}
+//	@Builder
+//	public CommentSaveRequestDto(Long id, String content, String writer, String email, String picture, String deleted, Long nested, Long boardId) {
+//		this.id = id;
+//		this.content = content;
+//		this.writer = writer;
+//		this.email = email;
+//		this.picture = picture;
+//		this.deleted = deleted;
+//		this.nested = nested;
+//		this.boardId = boardId;
+//	}
 	
 	public Comment toEntity() {
 		return Comment.builder()

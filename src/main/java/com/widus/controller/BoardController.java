@@ -1,12 +1,10 @@
 package com.widus.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +18,10 @@ import com.widus.constant.Method;
 import com.widus.dto.board.Board;
 import com.widus.dto.board.BoardRole;
 import com.widus.dto.board.BoardSaveRequestDto;
-import com.widus.dto.comment.Comment;
 import com.widus.dto.user.User;
 import com.widus.paging.Criteria;
 import com.widus.paging.PagingDto;
+import com.widus.service.BoardRecommendService;
 import com.widus.service.BoardService;
 import com.widus.utils.UiUtils;
 
@@ -34,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/board")
 public class BoardController extends UiUtils {
 	private final BoardService boardService;
+	private final BoardRecommendService boardRecommendService;
 
 	@GetMapping(value = "/board_list.do")
 	public String openBoard_list(@LoginUser SessionUser user, @RequestParam("division") BoardRole role, Criteria criteria, Model model) {
@@ -52,17 +51,6 @@ public class BoardController extends UiUtils {
 //		System.out.println(pagingDto.getCriteria().getCurrentPageNo());
 
 		return "board/board_list";
-	}
-	
-	@GetMapping(value = "/board_test_list.do")
-	public String board_test() {
-		PageRequest pageRequest = PageRequest.of(1, 10);
-		Page<Board> board = boardService.findAll(pageRequest);
-		
-		List<Board> list = board.getContent();
-	    list.forEach(b -> System.out.println(b.getId() + " " + b.getTitle()));
-
-		return "index";
 	}
 
 	@GetMapping(value = "/board_write.do")
