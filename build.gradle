@@ -31,7 +31,7 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	// https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc
 	implementation 'org.springframework.session:spring-session-jdbc'
-	implementation files('lib/commons-io-2.6.jar')
+	
 	// https://mvnrepository.com/artifact/commons-io/commons-io
 	// implementation 'commons-io:commons-io:2.6'
 	// https://mvnrepository.com/artifact/com.google.code.gson/gson

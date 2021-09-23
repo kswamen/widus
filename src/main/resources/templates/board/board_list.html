@@ -23,8 +23,10 @@
 							<tr th:if="${not #lists.isEmpty( boardList )}" class="board_content_row"
 								th:each="row : ${boardList}" onclick="moveDetailPage(this);">
 								<td scope="row" id="boardId" th:text="${row.id}"></td>
-								<td scope="row"><img style="border-radius: 50%;"
-										src="https://placeimg.com/50/50/any/grayscale" /></td>
+								<td scope="row">
+									<img style="border-radius: 50%; width: 70px; height: 70px;"
+										th:src="${row.thumbnail}" />
+								</td>
 								<td class="text-left" th:text="${row.title}"></td>
 								<td th:text="${row.writer}"></td>
 								<td th:text="${row.recommend}"></td>

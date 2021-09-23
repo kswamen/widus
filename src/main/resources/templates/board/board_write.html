@@ -9,7 +9,7 @@
 				<input type="hidden" name="id" th:value="${board.getId()}">
 				<input type="hidden" name="email" th:value="${user.getEmail()}">
 				<input type="hidden" name="writer" th:value="${user.getName()}">
-				<input type="hidden" name="thumbnail">
+				<input type="hidden" id="thumbnail" name="thumbnail">
 		
 				<div class="form-group">
 					<label for="exampleFormControlInput1">Title</label>
@@ -41,6 +41,9 @@
 					<button type="button" onclick="submit_btn_click();" class="btn btn-primary">Primary</button>
 				</div>
 			</form>
+			<button onclick="test1_click();">
+				test
+			</button>
 		</div>
 	</div>
 </th:block>
@@ -66,10 +69,25 @@
 			var form = $("form.board_write_form");
 			var role_input = $("input#role");
 			var option = $("#divisionSelect option:selected").attr("key");
-			
+			/*
+			var thumbnail = $("input#thumbnail");
+			thumbnail.val(get_thumbnail_src());
+			*/
 			role_input.val(option);
 			
 			form.submit();
+		}
+		
+		function get_thumbnail_src() {
+			var temporaryElement = document.createElement('div');
+			temporaryElement.innerHTML = $("textarea#content").val();
+			console.log(temporaryElement);
+			var result = temporaryElement.getElementsByTagName('img')[0];
+			
+			if ($(result).attr('src') == null) {
+				return "/common/ckDownload/placeholder-image.jpg";
+			}
+			return $(result).attr('src');
 		}
 
 		/*[- end of function -]*/

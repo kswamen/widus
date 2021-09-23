@@ -43,6 +43,11 @@ div.content-innerHTML {
 	padding-left: 25px;
 }
 
+div.content-innerHTML img {
+	max-width: 80%;
+	height: auto;
+}
+
 div.recommend-div {
 	font-size: 0.5rem;
 	display: flex;

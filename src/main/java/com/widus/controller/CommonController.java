@@ -12,12 +12,13 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.internal.build.AllowSysOut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,9 +29,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
+@Component
 @RequestMapping("/common/*")
 public class CommonController {
-	private String uploadPath = "C:";
+	@Value("${ckeditor.imageSaveDirectory}")
+	private String uploadPath;
 	
 	@RequestMapping(value = "ckUpload", method = RequestMethod.POST)
 	@ResponseBody
@@ -46,27 +49,28 @@ public class CommonController {
 		
 		try {
 			String fileName = upload.getOriginalFilename();
-			System.out.println(fileName);
 			byte[] bytes = upload.getBytes();
 			
-			String ckUploadPath = uploadPath + File.separator + "ckUpload" + File.separator + uid + "_" + fileName;
-			out = new FileOutputStream(new File(ckUploadPath));
+			File tempFolder = new File(uploadPath);
+			if (!tempFolder.exists()) {
+				try {
+					tempFolder.mkdirs();
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			String ckUploadPath = uploadPath + File.separator + uid + "_" + fileName;
+			File folder = new File(ckUploadPath);
+			
+			out = new FileOutputStream(folder);
 			out.write(bytes);
 			out.flush();
 			
-			String callback = req.getParameter("CKEditorFuncNum");
 			printWriter = res.getWriter();
 			String fileUrl = "/common/ckDownload/" + uid + "_" + fileName;
 
 			printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
-
-			// Toolbar image button
-//			else {
-//				printWriter.println("<script type='text/javascript'>"
-//						+ "window.parent.CKEDITOR.tools.callFunction("
-//						+ callback + ",'" + fileUrl + "', '이미지를 업로드했습니다.')"
-//						+ "</script>");
-//			}
 			
 			printWriter.flush();
 		} catch (IOException e) {
@@ -90,7 +94,7 @@ public class CommonController {
 	@ResponseBody
 	public ResponseEntity<Resource> ckDownload(@PathVariable("fileName") String fileName) {
 		try {
-			final ByteArrayResource inputStream = new ByteArrayResource(Files.readAllBytes(Paths.get("C:\\ckUpload\\" + fileName)));
+			final ByteArrayResource inputStream = new ByteArrayResource(Files.readAllBytes(Paths.get(uploadPath + File.separator + fileName)));
 			return ResponseEntity
 					.status(HttpStatus.OK)
 					.contentLength(inputStream.contentLength())
