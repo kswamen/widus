@@ -2,6 +2,9 @@ package com.widus.service;
 
 import java.util.Optional;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -36,17 +39,17 @@ public class BoardService {
 	
 	@Transactional
 	public Board saveBoard(BoardSaveRequestDto board) {
-		System.out.println(board.getContent());
+		board.setThumbnail(getThumbnailSrc(board.getContent()));
 		return boardRepository.save(board.toEntity());
 	}
 	
 	@Transactional
 	public Board saveBoard(BoardSaveRequestDto boardSaveRequestDto, Long id) {
 		Board board = boardRepository.findById(id).get();
-		System.out.println(board.getContent());
-		System.out.println(boardSaveRequestDto.getContent());
+//		System.out.println(board.getContent());
+//		System.out.println(boardSaveRequestDto.getContent());
 		
-//		getThumbnailSrc(Jsoup.parseBodyFragment(boardSaveRequestDto.getContent()));
+		boardSaveRequestDto.setThumbnail(getThumbnailSrc(boardSaveRequestDto.getContent()));
 
 		board.boardUpdate(
 				boardSaveRequestDto.getTitle(),
@@ -56,14 +59,17 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 	
-//	public String getThumbnailSrc(Document doc) {
-//		String result = "/common/ckDownload/placeholder-image.jpg";
-//		
-//		Element imgs = doc.getElementsByTag("img").first();
-//		System.out.println(imgs.attr("src"));
-//		
-//		return "123";
-//	}
+	public String getThumbnailSrc(String html) {
+		Document doc = Jsoup.parseBodyFragment(html);
+		String result = "/common/ckDownload/placeholder-image.jpg";
+		
+		Element img = doc.getElementsByTag("img").first();
+		if (img != null) {
+			result = img.attr("src");
+		}
+
+		return result;
+	}
 
 //	@Transactional
 //	public Page<Board> getBoardByRole(BoardRole role, Pageable pageable) {

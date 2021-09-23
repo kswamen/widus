@@ -32,10 +32,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc
 	implementation 'org.springframework.session:spring-session-jdbc'
 	
-	// https://mvnrepository.com/artifact/commons-io/commons-io
-	// implementation 'commons-io:commons-io:2.6'
-	// https://mvnrepository.com/artifact/com.google.code.gson/gson
-	// implementation 'com.google.code.gson:gson:2.7'
+	implementation 'org.jsoup:jsoup:1.14.2'
 	
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
