@@ -15,8 +15,6 @@
 								<th style="width: 10%" scope="col">T</th>
 								<th style="width: 70%" scope="col">Ttile</th>
 								<th style="width: 10%" scope="col">Writer</th>
-								<th style="width: 5%" scope="col">R</th>
-
 							</tr>
 						</thead>
 						<tbody>
@@ -29,8 +27,6 @@
 								</td>
 								<td class="text-left" th:text="${row.title}"></td>
 								<td th:text="${row.writer}"></td>
-								<td th:text="${row.recommend}"></td>
-
 							</tr>
 							<tr th:unless="${not #lists.isEmpty( boardList )}">
 								<td colspan="5">조회된 결과가 없습니다.</td>

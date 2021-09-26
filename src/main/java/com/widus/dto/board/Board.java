@@ -48,9 +48,6 @@ public class Board extends BaseTimeEntity {
 	@Column(columnDefinition = "varchar(255) default 'N'")
 	private String deleted;
 	
-	@Column(columnDefinition = "int default 0")
-	private Integer recommend;
-	
 	@Column
 	private String thumbnail;
 	
