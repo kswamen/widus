@@ -3,6 +3,9 @@ package com.widus.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -33,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardController extends UiUtils {
 	private final BoardService boardService;
 	private final BoardRecommendService boardRecommendService;
-
+	
 	@GetMapping(value = "/board_list.do")
 	public String openBoard_list(@LoginUser SessionUser user, @RequestParam("division") BoardRole role, Criteria criteria, Model model) {
 		model.addAttribute("divisionList", BoardRole.values());
@@ -78,6 +81,8 @@ public class BoardController extends UiUtils {
 		if (user != null) {
 			model.addAttribute("user", user);
 		}
+		boardService.updateVisitBoard(idx);
+		
 		model.addAttribute("boardId", idx);
 		Board board = boardService.getBoardById(idx).get();
 		model.addAttribute("board", board);

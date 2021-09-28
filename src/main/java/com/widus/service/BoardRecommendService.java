@@ -24,6 +24,7 @@ public class BoardRecommendService {
 			boardRecommendRepository.save(BoardRecommend.builder()
 					.boardId(recommendId.getBoardId())
 					.userEmail(recommendId.getUserEmail())
+					.recommended(1)
 					.build());
 		}
 		else {

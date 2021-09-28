@@ -14,6 +14,7 @@
 								<th style="width: 5%" scope="col">No.</th>
 								<th style="width: 10%" scope="col">T</th>
 								<th style="width: 70%" scope="col">Ttile</th>
+								<th style="width: 5%" scope="col">Visit</th>
 								<th style="width: 10%" scope="col">Writer</th>
 							</tr>
 						</thead>
@@ -26,6 +27,7 @@
 										th:src="${row.thumbnail}" />
 								</td>
 								<td class="text-left" th:text="${row.title}"></td>
+								<td th:text="${row.visit}"></td>
 								<td th:text="${row.writer}"></td>
 							</tr>
 							<tr th:unless="${not #lists.isEmpty( boardList )}">

@@ -52,7 +52,7 @@ public class Board extends BaseTimeEntity {
 	private String thumbnail;
 	
 	@Column(columnDefinition = "int default 0")
-	private String visit;
+	private int visit;
 
 	@Builder
 	public Board(String title, String content, String writer, String email, BoardRole role, String deleted, String thumbnail) {
@@ -70,6 +70,10 @@ public class Board extends BaseTimeEntity {
 		this.content = content;
 		this.role = role;
 		this.thumbnail = thumbnail;
+	}
+	
+	public void boardVisitPlus() {
+		this.visit += 1;
 	}
 	
 	public void boardDelete() {

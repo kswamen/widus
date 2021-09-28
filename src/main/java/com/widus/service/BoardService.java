@@ -110,4 +110,12 @@ public class BoardService {
 		
 		return boardRepository.save(board);
 	}
+	
+	@Transactional
+	public Board updateVisitBoard(Long id) {
+		Board board = boardRepository.findById(id).get();
+		board.boardVisitPlus();
+		
+		return boardRepository.save(board);
+	}
 }
