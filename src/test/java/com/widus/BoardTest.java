@@ -30,18 +30,7 @@ public class BoardTest {
 	
 	@Autowired
 	private BoardRecommendRepository boardRecommendRepository;
-	
-	@Test
-	void insertBoard() {
-		User user = userRepository.findByEmail("kimseokwon95@gmail.com");
-		
-		final Board board = Board.builder()
-				.email("kswamen@naver.com")
-				.title("test title")
-				.content("test content")
-				.role(BoardRole.FREE).build();
-		boardRepository.save(board);
-	}
+
 	
 	@Test
 	void getBoardList() {
@@ -109,9 +98,8 @@ public class BoardTest {
 	@Transactional
 	void findOneBoard() {
 		Long id = 1L;
-		User user = userRepository.findByEmail("kimseokwon95@gmail.com");
-		System.out.println(boardRepository.findByEmail("kimseokwon95@gmail.com"));
-		System.out.println(boardRepository.findById(id));
+		User user = userRepository.findById("kswamen@naver.com").get();
+		System.out.println(user.getName());
 	}
 	
 }

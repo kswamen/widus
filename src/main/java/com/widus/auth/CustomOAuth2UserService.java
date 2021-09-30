@@ -1,12 +1,11 @@
 package com.widus.auth;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -52,15 +51,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 //               .map(entity -> entity.update(attributes.getName(),attributes.getPicture()))
 //               .orElse(attributes.toEntity());
  
-	   User user = userRepository.findByEmail(attributes.getEmail());
-	   
-	   if (user == null) {
-		   user = attributes.toEntity();
+	   Optional<User> user = userRepository.findById(attributes.getEmail());
+	   if (user.isEmpty()) {
+		   return userRepository.save(attributes.toEntity());
 	   }
 	   else {
-		   user.update(attributes.getName(), attributes.getPicture());
+		   return userRepository.save(user.get().update(attributes.getName(), attributes.getPicture()));
 	   }
-
-       return userRepository.save(user);
    }
 }

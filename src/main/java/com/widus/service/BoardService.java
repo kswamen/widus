@@ -40,6 +40,7 @@ public class BoardService {
 	@Transactional
 	public Board saveBoard(BoardSaveRequestDto board) {
 		board.setThumbnail(getThumbnailSrc(board.getContent()));
+		board.setUser(userRepository.findById(board.getEmail()).get());
 		return boardRepository.save(board.toEntity());
 	}
 	
@@ -98,11 +99,7 @@ public class BoardService {
 		return pagingDto;
 	}
 	
-	@Transactional
-	public User getWroteUser(String email) {
-		return userRepository.findByEmail(email);
-	}
-	
+
 	@Transactional
 	public Board deleteBoard(Long id) {
 		Board board = boardRepository.findById(id).get();

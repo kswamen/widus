@@ -1,6 +1,7 @@
 package com.widus.dto.board;
 
-import lombok.Builder;
+import com.widus.dto.user.User;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ public class BoardSaveRequestDto {
 	private String writer;
 	private BoardRole role;
 	private String thumbnail;
+	private User user;
 	private String email;
 
 // 빌더 패턴이 필요한가?
@@ -33,7 +35,7 @@ public class BoardSaveRequestDto {
 				.role(role)
 				.writer(writer)
 				.thumbnail(thumbnail)
-				.email(email)
+				.user(user)
 				.build();
 	}
 }

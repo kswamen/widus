@@ -306,7 +306,7 @@
 				return;
 			}
 			
-			var writer_email = /*[[${board.getEmail()}]]*/ null;
+			var writer_email = /*[[${board.getUser().getEmail()}]]*/ null;
 			var user_email = /*[[${user?.getEmail()}]]*/ null;
 			if (writer_email == user_email) {
 				alert("작성자는 해당 게시글을 추천할 수 없습니다.");

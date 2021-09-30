@@ -20,14 +20,10 @@ import lombok.NoArgsConstructor;
 public class User extends BaseTimeEntity {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+   private String email;
 
    @Column(nullable = false)
    private String name;
-
-   @Column(nullable = false, unique=true)
-   private String email;
 
    @Column
    private String picture;
@@ -47,7 +43,7 @@ public class User extends BaseTimeEntity {
    public User update(String name, String picture) {
        this.name = name;
        this.picture = picture;
-
+       
        return this;
    }
 

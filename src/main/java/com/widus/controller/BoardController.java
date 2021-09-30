@@ -86,7 +86,7 @@ public class BoardController extends UiUtils {
 		model.addAttribute("boardId", idx);
 		Board board = boardService.getBoardById(idx).get();
 		model.addAttribute("board", board);
-		User wroteUser = boardService.getWroteUser(board.getEmail());
+		User wroteUser = board.getUser();
 		model.addAttribute("wroteUser", wroteUser);
 		
 		return "board/board_detail";
@@ -132,12 +132,6 @@ public class BoardController extends UiUtils {
 		Map<String, Object> pagingParams = new HashMap<>();
 		
 		try {
-//			System.out.println(board.getWriter());
-//			System.out.println(board.getContent());
-//			System.out.println(board.getEmail());
-//			System.out.println(board.getTitle());
-//			System.out.println(board.getRole());
-//			System.out.println(board.getThumbnail());
 			Board savedBoard = null;
 			pagingParams.put("division", board.getRole());
 			if (id == null) {
@@ -153,6 +147,7 @@ public class BoardController extends UiUtils {
 		} catch (DataAccessException e) {
 			return showMessageWithRedirect("데이터베이스 처리 과정 중 문제가 발생했습니다.", "/", Method.GET, null, model);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return showMessageWithRedirect("시스템에 문제가 발생했습니다.", "/", Method.GET, null, model);
 		}
 

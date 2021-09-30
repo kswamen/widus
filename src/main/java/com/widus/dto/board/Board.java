@@ -4,13 +4,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.DynamicInsert;
 
 import com.widus.dto.BaseTimeEntity;
+import com.widus.dto.user.User;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -42,8 +46,9 @@ public class Board extends BaseTimeEntity {
 //	@JoinColumn(nullable=false, name = "user_email", referencedColumnName="email")
 //	private User email;
 
-	@Column(nullable = false)
-	private String email;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_email")
+	private User user;
 	
 	@Column(columnDefinition = "varchar(255) default 'N'")
 	private String deleted;
@@ -55,10 +60,10 @@ public class Board extends BaseTimeEntity {
 	private int visit;
 
 	@Builder
-	public Board(String title, String content, String writer, String email, BoardRole role, String deleted, String thumbnail) {
+	public Board(String title, String content, String writer, User user, BoardRole role, String deleted, String thumbnail) {
 		this.title = title;
 		this.content = content;
-		this.email = email;
+		this.user = user;
 		this.writer = writer;
 		this.role = role;
 		this.deleted = deleted;
