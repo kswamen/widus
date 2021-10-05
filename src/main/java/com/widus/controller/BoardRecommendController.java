@@ -24,7 +24,7 @@ public class BoardRecommendController {
 	}
 	
 	@RequestMapping(value = "/totalRecommend.do", method = {RequestMethod.GET})
-	public int getTotalRecommen(@RequestParam final int boardId) {
+	public int getTotalRecommend(@RequestParam final Long boardId) {
 		return boardRecommendService.getTotalRecommend(boardId);
 	}
 	

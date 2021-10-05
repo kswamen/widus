@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.widus.dto.board.Board;
+import com.widus.dto.board.BoardRepository;
 import com.widus.dto.comment.Comment;
 import com.widus.dto.comment.CommentRepository;
 import com.widus.dto.comment.CommentSaveRequestDto;
+import com.widus.dto.user.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,10 +18,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class CommentService {
 	private final CommentRepository commentRepository;
+	private final BoardRepository boardRepository;
 	
 	@Transactional
 	public Comment saveComment(CommentSaveRequestDto commentSaveRequestDto) {
 		if (commentSaveRequestDto.getId() == 0) {
+			commentSaveRequestDto.setBoard(boardRepository.findById(commentSaveRequestDto.getBoardId()).get());
 			return commentRepository.save(commentSaveRequestDto.toEntity());
 		}
 		
@@ -31,14 +36,15 @@ public class CommentService {
 		}
 	}
 	
-	@Transactional
 	public List<Comment> getCommentList(Long boardId) {
-		return commentRepository.findByBoardId(boardId);
+		Board b = boardRepository.findById(boardId).get();
+		User u = b.getUser();
+		System.out.println(b.getUser().getEmail());
+		return commentRepository.findByBoardId(b);
 	}
 	
-	@Transactional
 	public List<Comment> getNestedCommentList(Long boardId) {
-		return commentRepository.findByBoardIdNested(boardId);
+		return commentRepository.findByBoardIdNested(boardRepository.findById(boardId).get());
 	}
 	
 	@Transactional

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecommendId implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int boardId;
+	private Long boardId;
 	private String userEmail;
 }

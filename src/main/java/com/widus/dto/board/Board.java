@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.widus.dto.BaseTimeEntity;
 import com.widus.dto.user.User;
 
@@ -42,12 +43,9 @@ public class Board extends BaseTimeEntity {
 	@Column(nullable = false)
 	private BoardRole role;
 
-//	@ManyToOne
-//	@JoinColumn(nullable=false, name = "user_email", referencedColumnName="email")
-//	private User email;
-
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_email")
+	@JsonIgnore
 	private User user;
 	
 	@Column(columnDefinition = "varchar(255) default 'N'")

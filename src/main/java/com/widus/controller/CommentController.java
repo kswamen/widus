@@ -34,7 +34,9 @@ public class CommentController {
 	
 	@RequestMapping(value = "/list.do", method = RequestMethod.GET)
 	public List<Comment> getCommentList(@RequestParam(value = "boardId", required = true)Long boardId) {
-		return commentService.getCommentList(boardId);
+		List<Comment> temp = commentService.getCommentList(boardId);
+		return temp;
+//		return commentService.getCommentList(boardId);
 	}
 	
 	@RequestMapping(value = "/nested/list.do", method = RequestMethod.GET)
@@ -44,7 +46,6 @@ public class CommentController {
 	
 	@DeleteMapping(value = "/delete.do/{id}")
 	public Comment deleteComment(@PathVariable("id") final Long id) {
-		System.out.println(id);
 		return commentService.deleteComment(id);
 	}
 }

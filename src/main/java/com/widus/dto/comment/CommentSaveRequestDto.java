@@ -1,6 +1,7 @@
 package com.widus.dto.comment;
 
-import lombok.Builder;
+import com.widus.dto.board.Board;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,19 +15,8 @@ public class CommentSaveRequestDto {
 	private String picture;
 	private String deleted;
 	private Long nested;
+	private Board board;
 	private Long boardId;
-	
-//	@Builder
-//	public CommentSaveRequestDto(Long id, String content, String writer, String email, String picture, String deleted, Long nested, Long boardId) {
-//		this.id = id;
-//		this.content = content;
-//		this.writer = writer;
-//		this.email = email;
-//		this.picture = picture;
-//		this.deleted = deleted;
-//		this.nested = nested;
-//		this.boardId = boardId;
-//	}
 	
 	public Comment toEntity() {
 		return Comment.builder()
@@ -37,7 +27,7 @@ public class CommentSaveRequestDto {
 				.picture(picture)
 				.deleted(deleted)
 				.nested(nested)
-				.boardId(boardId)
+				.board(board)
 				.build();
 	}
 }

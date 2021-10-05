@@ -27,12 +27,10 @@ public class BoardService {
 	private final BoardRepository boardRepository;
 	private final UserRepository userRepository;
 
-	@Transactional
 	public Optional<Board> getBoardById(long id) {
 		return boardRepository.findById(id);
 	}
 	
-	@Transactional
 	public Page<Board> findAll(PageRequest pageRequest) {
 		return boardRepository.findAll(pageRequest);
 	}
@@ -77,7 +75,6 @@ public class BoardService {
 //		return boardRepository.findByRole(role, pageable);
 //	}
 	
-	@Transactional
 	public Page<Board> getBoardByRole(BoardRole role, Criteria criteria) {
 		// JPA는 인덱스가 0부터 시작하기 때문에 1을 빼 준다.
 		PageRequest pageRequest = PageRequest.of(criteria.getCurrentPageNo() - 1, criteria.getRecordsPerPage());

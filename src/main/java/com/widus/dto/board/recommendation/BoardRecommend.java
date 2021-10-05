@@ -2,10 +2,15 @@ package com.widus.dto.board.recommendation;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.widus.dto.BaseTimeEntity;
+import com.widus.dto.board.Board;
+import com.widus.dto.user.User;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -17,16 +22,20 @@ import lombok.NoArgsConstructor;
 @IdClass(RecommendId.class)
 public class BoardRecommend extends BaseTimeEntity {
 	@Id
-	private int boardId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "board_id")
+	private Board boardId;
 	
 	@Id
-	private String userEmail;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_email")
+	private User userEmail;
 	
 	@Column(columnDefinition = "int default 1")
 	private Integer recommended;
 	
 	@Builder
-	public BoardRecommend(int boardId, String userEmail, int recommended) {
+	public BoardRecommend(Board boardId, User userEmail, int recommended) {
 		this.boardId = boardId;
 		this.userEmail = userEmail;
 		this.recommended = recommended;

@@ -47,37 +47,6 @@ public class BoardTest {
 	}
 	
 	@Test
-	void insertRecommend() {
-		BoardRecommend b = BoardRecommend.builder().boardId(1)
-				.userEmail("asdf@naver.com").build();
-		boardRecommendRepository.save(b);
-	}
-	
-	@Test
-	void findRecommend() {
-		RecommendId a = new RecommendId(2, "asdf@naver.com");
-		Optional<BoardRecommend> b = boardRecommendRepository.findById(a);
-		System.out.println(b.equals(Optional.empty()));
-//		System.out.println(b.get().getBoardId());
-//		System.out.println(b.get().getUserEmail());
-	}
-	
-	@Test
-	void toggleRecommend() {
-		RecommendId a = new RecommendId(1, "asdf@naver.com");
-		Optional<BoardRecommend> b = boardRecommendRepository.findById(a);
-		
-		BoardRecommend new_b = b.get();
-		new_b.toggleRecommend();
-		boardRecommendRepository.save(new_b);
-	}
-	
-	@Test
-	void countRecommend() {
-		System.out.println(boardRecommendRepository.getRecommendCount(510));
-	}
-	
-	@Test
 	void updateBoard() {
 		Board board = boardRepository.findById(12L).get();
 		
